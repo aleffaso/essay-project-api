@@ -1,0 +1,39 @@
+{
+  "name": "essay-project-api",
+  "version": "1.0.0",
+  "description": "## Overview",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx nodemon --exec ts-node src/index.ts",
+    "migration:generate": "npx typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/database/migrations/default",
+    "migration:run": "npx typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run",
+    "typeorm": "npx typeorm-ts-node-commonjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aleffaso/essay-project-api.git"
+  },
+  "author": "Aleff Oliveira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aleffaso/essay-project-api/issues"
+  },
+  "homepage": "https://github.com/aleffaso/essay-project-api#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.5",
+    "typeorm": "^0.3.11"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/uuid": "^9.0.8",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3",
+    "uuid": "^9.0.1"
+  }
+}

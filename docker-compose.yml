@@ -1,0 +1,26 @@
+version: "3"
+services:
+  db:
+    image: postgres:13
+    container_name: essay-project-api
+    ports:
+      - "${ORM_CONFIG_PORT}:5432"
+    volumes:
+      - ./.ignore/postgres/postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app/
+      - /app/node_modules
+    ports:
+      - "${PORT}:80"
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm run migration:generate; npm run migration:run; npm run dev'
+    env_file:
+      - .env
+    depends_on:
+      - db
