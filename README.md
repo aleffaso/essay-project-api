@@ -12,7 +12,7 @@ The main purpose of this project is to create an essay project api to students
 
 ## Clone the repository
 
-`git clone https://github.com/aleffaso/dreamsports`
+`git clone https://github.com/aleffaso/essay-project-api`
 
 <hr>
 
