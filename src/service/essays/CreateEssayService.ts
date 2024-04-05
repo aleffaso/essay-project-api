@@ -1,4 +1,5 @@
 import { AppDataSource } from "../../data-source";
+
 import { Essay as EssayTable } from "../../entities/Essay";
 import { EssayCreatedObserver } from "./observers/EmailNotifier";
 
@@ -12,7 +13,6 @@ export class CreateEssayService {
     title,
     author,
     text,
-    uploadDate = new Date(),
     amazonLink,
     annotations,
     status,
@@ -26,7 +26,6 @@ export class CreateEssayService {
         title,
         author,
         text,
-        uploadDate,
         amazonLink,
         annotations,
         status,
@@ -39,12 +38,11 @@ export class CreateEssayService {
 
       this.observer.notify(essay);
 
-      const essayResponse: essayResponse = {
+      const essayResponse: EssayResponse = {
         id: essay.id,
         title: title,
         author: author,
         text: text,
-        uploadDate: uploadDate,
         amazonLink: amazonLink,
         annotations: annotations,
         status: status,

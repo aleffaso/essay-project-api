@@ -3,7 +3,6 @@ type Essay = {
   title: string;
   author: string;
   text: string;
-  uploadDate: Date;
   amazonLink?: string;
   annotations?: string;
   status?: string;
@@ -12,13 +11,17 @@ type Essay = {
   comments?: string;
 };
 
-type essayResponse = Essay;
+type EssayResponse = Essay;
 
-type essayUpdate = {
+type EssayUpdate = {
   id: Essay["id"];
   annotations?: Essay["annotations"];
   status?: Essay["status"];
   corrections?: Essay["corrections"];
   tags?: Essay["tags"];
   comments?: Essay["comments"];
+};
+
+type EssayId = {
+  id: Essay["id"];
 };

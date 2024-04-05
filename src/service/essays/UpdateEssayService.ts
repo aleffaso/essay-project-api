@@ -16,13 +16,13 @@ export class UpdateEssayService {
     corrections,
     tags,
     comments,
-  }: essayUpdate) {
+  }: EssayUpdate) {
     try {
       const essayRepo = AppDataSource.getRepository(EssayTable);
       const essay = await essayRepo.findOne({ where: { id } });
 
       if (!essay) {
-        throw new DoesNotExistError("User does not exist");
+        throw new DoesNotExistError("Essay does not exist");
       }
 
       essayRepo.update(id as string, {
@@ -37,12 +37,11 @@ export class UpdateEssayService {
 
       this.observer.notify(essay);
 
-      const essayResponse: essayResponse = {
+      const essayResponse: EssayResponse = {
         id: essay.id,
         title: essay.title,
         author: essay.author,
         text: essay.text,
-        uploadDate: essay.uploadDate,
         amazonLink: essay.amazonLink,
         annotations: annotations,
         status: status,

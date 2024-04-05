@@ -21,9 +21,6 @@ export class Essay {
   @Column({ type: "text", nullable: false })
   text: string;
 
-  @Column({ nullable: false })
-  uploadDate: Date;
-
   @Column({ nullable: true })
   amazonLink: string;
 
