@@ -16,4 +16,9 @@ export const KEYS = {
     HOST: (process.env.ORM_CONFIG_HOST as string) ?? "",
     PORT: Number(process.env.ORM_CONFIG_PORT as string) ?? undefined,
   },
+  ADMIN: {
+    ADMIN_USERNAME: (process.env.ADMIN_USERNAME as string) ?? "Admin",
+    ADMIN_EMAIL: (process.env.ADMIN_USERNAME as string) ?? "admin@example.com",
+    ADMIN_PASSWORD: (process.env.ADMIN_USERNAME as string) ?? "Admin",
+  },
 };

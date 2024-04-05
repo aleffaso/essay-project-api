@@ -7,6 +7,7 @@ import {
 import { UpdateEssayService } from "../../service/essays/UpdateEssayService";
 import { ListEssaysService } from "../../service/essays/ListEssaysService";
 import { DeleteEssayService } from "../../service/essays/DeleteEssayService";
+import { GetEssayService } from "../../service/essays/GetEssayService";
 
 const createEssayService = new CreateEssayService(new EmailCreationNotifier());
 const updateEssayService = new UpdateEssayService(new EmailUpdateNotifier());
@@ -38,6 +39,19 @@ export default new (class EssayController {
       });
 
       return res.json(essayRequest);
+    } catch (error) {
+      res.json({ error: error });
+    }
+  }
+
+  async get(req: Request, res: Response) {
+    const { id } = req.params;
+    try {
+      const getEssayService = new GetEssayService();
+
+      const user = await getEssayService.execute({ id });
+
+      return res.json(user);
     } catch (error) {
       res.json({ error: error });
     }

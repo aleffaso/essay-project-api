@@ -1,5 +1,5 @@
 type Essay = {
-  id?: string;
+  id: string;
   title: string;
   author: string;
   text: string;
@@ -11,17 +11,14 @@ type Essay = {
   comments?: string;
 };
 
-type EssayResponse = Essay;
+type EssayCreate = Omit<Essay, "id">;
 
-type EssayUpdate = {
-  id: Essay["id"];
-  annotations?: Essay["annotations"];
-  status?: Essay["status"];
-  corrections?: Essay["corrections"];
-  tags?: Essay["tags"];
-  comments?: Essay["comments"];
+type EssayUpdate = Partial<
+  Pick<Essay, "annotations" | "status" | "corrections" | "tags" | "comments">
+> & {
+  id: string;
 };
 
 type EssayId = {
-  id: Essay["id"];
+  id: string;
 };

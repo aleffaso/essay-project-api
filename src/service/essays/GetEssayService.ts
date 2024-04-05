@@ -14,12 +14,11 @@ export class GetEssayService {
         throw new DoesNotExistError("Essay does not exist");
       }
 
-      const essayResponse: EssayResponse = {
+      const essayResponse: Essay = {
         id: id,
         title: essay.title,
         author: essay.author,
         text: essay.text,
-        uploadDate: essay.uploadDate,
         amazonLink: essay.amazonLink,
         annotations: essay.annotations,
         status: essay.status,

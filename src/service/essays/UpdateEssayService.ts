@@ -37,7 +37,7 @@ export class UpdateEssayService {
 
       this.observer.notify(essay);
 
-      const essayResponse: EssayResponse = {
+      const essayResponse: Essay = {
         id: essay.id,
         title: essay.title,
         author: essay.author,

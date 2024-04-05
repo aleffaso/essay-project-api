@@ -19,7 +19,7 @@ export class CreateEssayService {
     corrections,
     tags,
     comments,
-  }: Essay) {
+  }: EssayCreate) {
     try {
       const essayRepo = AppDataSource.getRepository(EssayTable);
       const essay = essayRepo.create({
@@ -38,7 +38,7 @@ export class CreateEssayService {
 
       this.observer.notify(essay);
 
-      const essayResponse: EssayResponse = {
+      const essayResponse: Essay = {
         id: essay.id,
         title: title,
         author: author,

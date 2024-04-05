@@ -1,23 +1,23 @@
 import { AppDataSource } from "../../data-source";
 
-import { Essay as EssayTable } from "../../entities/Essay";
+import { User as UserTable } from "../../entities/User";
 import { DoesNotExistError } from "../../errors";
 
-export class ListEssaysService {
+export class ListUsersService {
   async execute(page: number, limit: number) {
     try {
-      const essayRepo = AppDataSource.getRepository(EssayTable);
+      const userRepo = AppDataSource.getRepository(UserTable);
       const offset = (page - 1) * limit;
-      const essays = await essayRepo.find({
+      const users = await userRepo.find({
         skip: offset,
         take: limit,
       });
 
-      if (!essays || essays.length === 0) {
-        throw new DoesNotExistError("Essays do not exist");
+      if (!users || users.length === 0) {
+        throw new DoesNotExistError("Users do not exist");
       }
 
-      return { count: essays.length, essays };
+      return { count: users.length, users };
     } catch (error) {
       if (error instanceof DoesNotExistError) {
         return {
