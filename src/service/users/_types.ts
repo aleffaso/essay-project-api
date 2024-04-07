@@ -1,6 +1,7 @@
 type User = {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   admin?: boolean;
   is_active?: boolean;

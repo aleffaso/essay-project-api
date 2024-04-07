@@ -4,8 +4,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
 } from "typeorm";
-import { v4 as uuid } from "uuid"; //generate random id
+import { v4 as uuid } from "uuid";
+import { Student } from "./Student";
+import { EssayUpdate } from "./EssayUpdate";
 
 @Entity("essays")
 export class Essay {
@@ -24,26 +28,23 @@ export class Essay {
   @Column({ nullable: true })
   amazonLink: string;
 
-  @Column({ type: "text", nullable: true })
-  annotations: string;
-
   @Column({ nullable: false, default: "pending" })
   status: string;
 
-  @Column({ type: "text", nullable: true })
-  corrections: string;
-
   @Column({ nullable: true })
   tags: string;
-
-  @Column({ type: "text", nullable: true })
-  comments: string;
 
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToOne(() => Student, (student) => student.essays)
+  student: Student;
+
+  @OneToMany(() => EssayUpdate, (essayUpdate) => essayUpdate.essay)
+  updates: EssayUpdate[];
 
   constructor() {
     if (!this.id) {

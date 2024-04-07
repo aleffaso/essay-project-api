@@ -1,5 +1,5 @@
 import { Router } from "express";
-import EssayController from "../../controllers/essay/EssayController";
+import EssayController from "../controllers/EssayController";
 
 const essayRouter = Router();
 //TO DO: add middleware authentication

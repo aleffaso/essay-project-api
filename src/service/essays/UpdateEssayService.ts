@@ -9,14 +9,7 @@ export class UpdateEssayService {
   constructor(observer: EssayUpdatedObserver) {
     this.observer = observer;
   }
-  async execute({
-    id,
-    annotations,
-    status,
-    corrections,
-    tags,
-    comments,
-  }: EssayUpdate) {
+  async execute({ id, title, text, amazonLink, tags }: EssayUpdate) {
     try {
       const essayRepo = AppDataSource.getRepository(EssayTable);
       const essay = await essayRepo.findOne({ where: { id } });
@@ -26,11 +19,10 @@ export class UpdateEssayService {
       }
 
       essayRepo.update(id as string, {
-        annotations,
-        status,
-        corrections,
+        title,
+        text,
+        amazonLink,
         tags,
-        comments,
       });
 
       await essayRepo.save(essay);
@@ -43,11 +35,8 @@ export class UpdateEssayService {
         author: essay.author,
         text: essay.text,
         amazonLink: essay.amazonLink,
-        annotations: annotations,
-        status: status,
-        corrections: corrections,
-        tags: tags,
-        comments: comments,
+        status: essay.status,
+        tags: essay.tags,
       };
 
       return { essay: essayResponse };

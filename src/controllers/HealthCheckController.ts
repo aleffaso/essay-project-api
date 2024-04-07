@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HealthCheckService } from "../service/health-check/HealthCheckService";
+import { HealthCheckService } from "../service/HealthCheckService";
 
 class HealthCheckController {
   async healthCheck(req: Request, res: Response) {

@@ -12,11 +12,12 @@ export class CreateUserService {
     this.observer = observer;
   }
   async execute({
-    name,
+    firstName,
+    lastName,
     email,
     admin = false,
-    is_active = true,
     password,
+    is_active = true,
   }: UserCreate) {
     try {
       const userRepo = AppDataSource.getRepository(UserTable);
@@ -27,7 +28,8 @@ export class CreateUserService {
       }
 
       const user = userRepo.create({
-        name,
+        firstName,
+        lastName,
         email,
         admin,
         is_active,
@@ -40,10 +42,11 @@ export class CreateUserService {
 
       const userResponse: UserResponse = {
         id: user.id,
-        name: name,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: email,
         admin: admin,
         is_active: is_active,
-        email: email,
       };
 
       return { user: userResponse };

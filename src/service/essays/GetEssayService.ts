@@ -20,11 +20,8 @@ export class GetEssayService {
         author: essay.author,
         text: essay.text,
         amazonLink: essay.amazonLink,
-        annotations: essay.annotations,
         status: essay.status,
-        corrections: essay.corrections,
         tags: essay.tags,
-        comments: essay.comments,
       };
 
       return { essay: essayResponse };

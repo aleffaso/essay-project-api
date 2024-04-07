@@ -4,17 +4,14 @@ type Essay = {
   author: string;
   text: string;
   amazonLink?: string;
-  annotations?: string;
   status?: string;
-  corrections?: string;
   tags?: string;
-  comments?: string;
 };
 
-type EssayCreate = Omit<Essay, "id">;
+type EssayCreate = Omit<Essay, "id" | "created_at" | "updated_at">;
 
 type EssayUpdate = Partial<
-  Pick<Essay, "annotations" | "status" | "corrections" | "tags" | "comments">
+  Pick<Essay, "title" | "text" | "amazonLink" | "tags">
 > & {
   id: string;
 };

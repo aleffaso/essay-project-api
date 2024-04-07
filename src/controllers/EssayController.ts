@@ -1,41 +1,28 @@
 import { Request, Response } from "express";
-import { CreateEssayService } from "../../service/essays/CreateEssayService";
+import { CreateEssayService } from "../service/essays/CreateEssayService";
 import {
   EmailCreationNotifier,
   EmailUpdateNotifier,
-} from "../../service/essays/observers/EmailNotifier";
-import { UpdateEssayService } from "../../service/essays/UpdateEssayService";
-import { ListEssaysService } from "../../service/essays/ListEssaysService";
-import { DeleteEssayService } from "../../service/essays/DeleteEssayService";
-import { GetEssayService } from "../../service/essays/GetEssayService";
+} from "../service/essays/observers/EmailNotifier";
+import { UpdateEssayService } from "../service/essays/UpdateEssayService";
+import { ListEssaysService } from "../service/essays/ListEssaysService";
+import { DeleteEssayService } from "../service/essays/DeleteEssayService";
+import { GetEssayService } from "../service/essays/GetEssayService";
 
 const createEssayService = new CreateEssayService(new EmailCreationNotifier());
 const updateEssayService = new UpdateEssayService(new EmailUpdateNotifier());
 
 export default new (class EssayController {
   async create(req: Request, res: Response) {
-    const {
-      title,
-      author,
-      text,
-      amazonLink,
-      annotations,
-      status,
-      corrections,
-      tags,
-      comments,
-    } = req.body;
+    const { title, author, text, amazonLink, status, tags } = req.body;
     try {
       const essayRequest = await createEssayService.execute({
         title,
         author,
         text,
         amazonLink,
-        annotations,
         status,
-        corrections,
         tags,
-        comments,
       });
 
       return res.json(essayRequest);
@@ -59,15 +46,14 @@ export default new (class EssayController {
 
   async update(req: Request, res: Response) {
     const { id } = req.params;
-    const { annotations, status, corrections, tags, comments } = req.body;
+    const { title, text, amazonLink, tags } = req.body;
     try {
       const essayRequest = await updateEssayService.execute({
         id,
-        annotations,
-        status,
-        corrections,
+        title,
+        text,
+        amazonLink,
         tags,
-        comments,
       });
 
       return res.json(essayRequest);

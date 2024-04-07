@@ -14,11 +14,8 @@ export class CreateEssayService {
     author,
     text,
     amazonLink,
-    annotations,
     status,
-    corrections,
     tags,
-    comments,
   }: EssayCreate) {
     try {
       const essayRepo = AppDataSource.getRepository(EssayTable);
@@ -27,11 +24,8 @@ export class CreateEssayService {
         author,
         text,
         amazonLink,
-        annotations,
         status,
-        corrections,
         tags,
-        comments,
       });
 
       await essayRepo.save(essay);
@@ -44,11 +38,8 @@ export class CreateEssayService {
         author: author,
         text: text,
         amazonLink: amazonLink,
-        annotations: annotations,
         status: status,
-        corrections: corrections,
         tags: tags,
-        comments: comments,
       };
 
       return { essay: essayResponse };

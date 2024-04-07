@@ -8,12 +8,12 @@ export interface UserUpdatedObserver {
 
 export class EmailCreationNotifier implements UserCreatedObserver {
   notify(user: User): void {
-    console.log(`Welcome aboard ${user.name}`);
+    console.log(`Welcome aboard ${user.firstName}`);
   }
 }
 
 export class EmailUpdateNotifier implements UserUpdatedObserver {
   notify(user: User): void {
-    console.log(`${user.name} your password has been updated`);
+    console.log(`${user.firstName} your password has been updated`);
   }
 }

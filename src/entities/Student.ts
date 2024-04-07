@@ -4,13 +4,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
-  ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { v4 as uuid } from "uuid";
-import { EssayUpdate } from "./EssayUpdate";
+import { Essay } from "./Essay";
 
-@Entity("users")
-export class User {
+@Entity("students")
+export class Student {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
@@ -23,14 +23,26 @@ export class User {
   @Column({ nullable: false })
   email: string;
 
-  @Column({ nullable: true })
-  admin: boolean;
-
   @Column({ nullable: false, select: false })
   password: string;
 
-  @Column({ nullable: false, default: true })
-  is_active: boolean;
+  @Column({ nullable: true })
+  phoneNumber: string;
+
+  @Column({ nullable: true })
+  address: string;
+
+  @Column({ nullable: true })
+  city: string;
+
+  @Column({ nullable: true })
+  state: string;
+
+  @Column({ nullable: true })
+  country: string;
+
+  @Column({ nullable: true })
+  zipCode: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -38,8 +50,8 @@ export class User {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => EssayUpdate, (essayUpdate) => essayUpdate.essay)
-  updates: EssayUpdate[];
+  @OneToMany(() => Essay, (essay) => essay.student)
+  essays: Essay[];
 
   constructor() {
     if (!this.id) {

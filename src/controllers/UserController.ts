@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
-import { CreateUserService } from "../../service/users/CreateUserService";
+import { CreateUserService } from "../service/users/CreateUserService";
 import {
   EmailCreationNotifier,
   EmailUpdateNotifier,
-} from "../../service/users/observers/EmailNotifier";
-import { UpdateUserService } from "../../service/users/UpdateUserService";
-import { ListUsersService } from "../../service/users/ListUsersService";
-import { GetUserService } from "../../service/users/GetUserService";
+} from "../service/users/observers/EmailNotifier";
+import { UpdateUserService } from "../service/users/UpdateUserService";
+import { ListUsersService } from "../service/users/ListUsersService";
+import { GetUserService } from "../service/users/GetUserService";
+import { DeleteUserService } from "../service/users/DeleteUserService";
 
 const createUserService = new CreateUserService(new EmailCreationNotifier());
 const updateUserService = new UpdateUserService(new EmailUpdateNotifier());
@@ -15,10 +16,11 @@ export default new (class UserController {
   async authenticate(req: Request, res: Response) {}
 
   async create(req: Request, res: Response) {
-    const { name, email, admin, is_active, password } = req.body;
+    const { firstName, lastName, email, admin, password, is_active } = req.body;
     try {
       const userRequest = await createUserService.execute({
-        name,
+        firstName,
+        lastName,
         email,
         admin,
         password,
@@ -32,11 +34,12 @@ export default new (class UserController {
   }
   async update(req: Request, res: Response) {
     const { id } = req.params;
-    const { name, email, admin, is_active, password } = req.body;
+    const { firstName, lastName, email, admin, is_active, password } = req.body;
     try {
       const userRequest = await updateUserService.execute({
         id,
-        name,
+        firstName,
+        lastName,
         email,
         admin,
         is_active,
@@ -77,5 +80,21 @@ export default new (class UserController {
       res.json({ error: error });
     }
   }
-  async delete(req: Request, res: Response) {}
+
+  async delete(req: Request, res: Response) {
+    const { id } = req.params;
+    try {
+      const deleteUserService = new DeleteUserService();
+
+      await deleteUserService.execute({
+        id,
+      });
+
+      return res.status(200).json({
+        message: "Deleted successfully",
+      });
+    } catch (error) {
+      res.json({ error: error });
+    }
+  }
 })();

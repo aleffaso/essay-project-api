@@ -17,8 +17,13 @@ export const KEYS = {
     PORT: Number(process.env.ORM_CONFIG_PORT as string) ?? undefined,
   },
   ADMIN: {
-    ADMIN_USERNAME: (process.env.ADMIN_USERNAME as string) ?? "Admin",
+    ADMIN_FIRSTNAME: (process.env.ADMIN_FIRSTNAME as string) ?? "Admin",
+    ADMIN_LASTNAME: (process.env.ADMIN_LASTNAME as string) ?? "Project",
     ADMIN_EMAIL: (process.env.ADMIN_USERNAME as string) ?? "admin@example.com",
     ADMIN_PASSWORD: (process.env.ADMIN_USERNAME as string) ?? "Admin",
+  },
+  JWT: {
+    STUDENT: (process.env.JWT_KEY_TOKEN_STUDENT as string) ?? "",
+    TOKEN_EXPIRES_IN: (process.env.JWT_TOKEN_EXPIRES_IN as string) ?? "1d",
   },
 };

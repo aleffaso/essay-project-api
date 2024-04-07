@@ -11,12 +11,28 @@ export class UpdateUserService {
   constructor(observer: UserUpdatedObserver) {
     this.observer = observer;
   }
-  async execute({ id, name, email, admin, is_active, password }: UserUpdate) {
+
+  async execute({
+    id,
+    firstName,
+    lastName,
+    email,
+    admin,
+    is_active,
+    password,
+  }: UserUpdate) {
     try {
       const userRepo = AppDataSource.getRepository(UserTable);
       const user = await userRepo.findOne({
         where: { id },
-        select: ["name", "email", "admin", "is_active", "password"],
+        select: [
+          "firstName",
+          "lastName",
+          "email",
+          "admin",
+          "is_active",
+          "password",
+        ],
       });
 
       if (!user) {
@@ -24,7 +40,8 @@ export class UpdateUserService {
       }
 
       userRepo.update(id as string, {
-        name: name,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         admin: admin,
         is_active: is_active,
@@ -33,13 +50,17 @@ export class UpdateUserService {
 
       const userResponse: UserUpdate = {
         id: id,
-        name: name,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
         admin: admin,
         is_active: is_active,
-        email: email,
       };
 
-      if (password && !(await bcrypt.compare(password.trim(), user.password))) {
+      if (
+        password &&
+        !(await bcrypt.compare(password.trim() as string, user.password))
+      ) {
         this.observer.notify(user);
       }
 
