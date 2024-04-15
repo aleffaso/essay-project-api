@@ -10,7 +10,7 @@ class HealthCheckController {
 
       return res.json(healthCheck);
     } catch (error) {
-      res.json({ error: error });
+      throw error;
     }
   }
 }

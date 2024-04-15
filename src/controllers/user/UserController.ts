@@ -1,30 +1,46 @@
 import { Request, Response } from "express";
-import { CreateUserService } from "../service/users/CreateUserService";
+import { CreateUserService } from "../../service/users/CreateUserService";
 import {
   EmailCreationNotifier,
   EmailUpdateNotifier,
-} from "../service/users/observers/EmailNotifier";
-import { UpdateUserService } from "../service/users/UpdateUserService";
-import { ListUsersService } from "../service/users/ListUsersService";
-import { GetUserService } from "../service/users/GetUserService";
-import { DeleteUserService } from "../service/users/DeleteUserService";
-
-const createUserService = new CreateUserService(new EmailCreationNotifier());
-const updateUserService = new UpdateUserService(new EmailUpdateNotifier());
+} from "../../service/users/observers/EmailNotifier";
+import { UpdateUserService } from "../../service/users/UpdateUserService";
+import { ListUsersService } from "../../service/users/ListUsersService";
+import { GetUserService } from "../../service/users/GetUserService";
+import { DeleteUserService } from "../../service/users/DeleteUserService";
+import { AuthenticateUserService } from "../../service/users/AuthenticateUserService";
 
 export default new (class UserController {
-  async authenticate(req: Request, res: Response) {}
+  async authenticate(req: Request, res: Response) {
+    const { email, password } = req.body;
+    try {
+      const authenticateStudentService = new AuthenticateUserService();
+
+      const authenticate = await authenticateStudentService.execute({
+        email,
+        password,
+      });
+
+      return res.json(authenticate);
+    } catch (error) {
+      res.json({ error: error });
+    }
+  }
 
   async create(req: Request, res: Response) {
-    const { firstName, lastName, email, admin, password, is_active } = req.body;
+    const { firstName, lastName, email, password, isActive, permissions } =
+      req.body;
     try {
+      const createUserService = new CreateUserService(
+        new EmailCreationNotifier()
+      );
       const userRequest = await createUserService.execute({
         firstName,
         lastName,
         email,
-        admin,
         password,
-        is_active,
+        isActive,
+        permissions,
       });
 
       return res.json(userRequest);
@@ -34,16 +50,21 @@ export default new (class UserController {
   }
   async update(req: Request, res: Response) {
     const { id } = req.params;
-    const { firstName, lastName, email, admin, is_active, password } = req.body;
+    const { firstName, lastName, email, isActive, password, permissions } =
+      req.body;
     try {
+      const updateUserService = new UpdateUserService(
+        new EmailUpdateNotifier()
+      );
+
       const userRequest = await updateUserService.execute({
         id,
         firstName,
         lastName,
         email,
-        admin,
-        is_active,
         password,
+        isActive,
+        permissions,
       });
 
       return res.json(userRequest);
@@ -67,13 +88,18 @@ export default new (class UserController {
 
   async list(req: Request, res: Response) {
     try {
+      const authorization = req.headers.authorization;
       const { page = 1, limit = 10 } = req.query;
       const parsedPage = parseInt(page as string);
       const parsedLimit = parseInt(limit as string);
 
       const listUsersService = new ListUsersService();
 
-      const users = await listUsersService.execute(parsedPage, parsedLimit);
+      const users = await listUsersService.execute(
+        authorization,
+        parsedPage,
+        parsedLimit
+      );
 
       return res.json(users);
     } catch (error) {

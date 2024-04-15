@@ -1,49 +1,41 @@
-export class DoesNotExistError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = message;
-  }
-  status() {
-    return 401;
+export class CustomError extends Error {
+  statusCode: number;
+  statusMessage: string;
+
+  constructor(name: string, message: string, statusCode: number) {
+    super();
+    this.name = name;
+    this.statusMessage = message;
+    this.statusCode = statusCode;
   }
 }
 
-export class AlreadyExistsError extends Error {
+export class DoesNotExistError extends CustomError {
   constructor(message: string) {
-    super(message);
-    this.name = message;
-  }
-  status() {
-    return 409;
+    super("DoesNotExistError", message, 401);
   }
 }
 
-export class ForbiddenError extends Error {
+export class AlreadyExistsError extends CustomError {
   constructor(message: string) {
-    super(message);
-    this.name = message;
-  }
-  status() {
-    return 403;
+    super("AlreadyExistsError", message, 409);
   }
 }
 
-export class ServiceUnavailableError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = message;
-  }
-  status() {
-    return 503;
+export class ForbiddenError extends CustomError {
+  constructor() {
+    super("ForbiddenError", "You do not have permission to access this", 403);
   }
 }
 
-export class InvalidDataError extends Error {
+export class ServiceUnavailableError extends CustomError {
   constructor(message: string) {
-    super(message);
-    this.name = message;
+    super("ServiceUnavailableError", message, 503);
   }
-  status() {
-    return 400;
+}
+
+export class InvalidDataError extends CustomError {
+  constructor(message: string) {
+    super("InvalidDataError", message, 400);
   }
 }

@@ -1,0 +1,8 @@
+export enum PermissionType {
+  ADMIN = "ADMIN",
+  USER = "USER",
+  CUSTOMER = "CUSTOMER",
+  FINANCIAL = "FINANCIAL",
+  SUPPORT = "SUPPORT",
+  DEVELOPER = "DEVELOPER",
+}

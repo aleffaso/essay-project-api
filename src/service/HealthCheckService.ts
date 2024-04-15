@@ -10,12 +10,7 @@ export class HealthCheckService {
       }
       return { message: "API online", status_code: 200 };
     } catch (error) {
-      if (error instanceof ServiceUnavailableError) {
-        return {
-          message: error.name,
-          status_code: error.status(),
-        };
-      }
+      throw error;
     }
   }
 }

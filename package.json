@@ -8,7 +8,7 @@
     "migration:generate": "npx typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/database/migrations/default",
     "migration:run": "npx typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run",
     "typeorm": "npx typeorm-ts-node-commonjs",
-    "createAdminUser": "npx ts-node src/config/createAdminUser.ts"
+    "initialConfig": "npx ts-node src/config/index.ts"
   },
   "repository": {
     "type": "git",

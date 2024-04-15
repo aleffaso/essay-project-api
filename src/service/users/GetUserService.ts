@@ -1,36 +1,35 @@
 import { AppDataSource } from "../../data-source";
 
-import { User as UserTable } from "../../entities/User";
+import { User as UserTable } from "../../entities/user/User";
+import { UserPermission } from "../../entities/user/UserPermission";
 import { DoesNotExistError } from "../../errors";
+import { UserType, UserIdType } from "./_types";
 
 export class GetUserService {
-  async execute({ id }: UserId) {
+  async execute({ id }: UserIdType) {
     try {
       const userRepo = AppDataSource.getRepository(UserTable);
-
-      const user = await userRepo.findOne({ where: { id } });
+      const user = await userRepo.findOne({
+        where: { id },
+        relations: ["permissions"],
+      });
 
       if (!user) {
         throw new DoesNotExistError("User does not exist");
       }
 
-      const userResponse: User = {
+      const userResponse: UserType = {
         id: id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        admin: user.admin,
-        is_active: user.is_active,
+        isActive: user.isActive,
+        permissions: user.permissions,
       };
 
       return { user: userResponse };
     } catch (error) {
-      if (error instanceof DoesNotExistError) {
-        return {
-          message: error.name,
-          status_code: error.status(),
-        };
-      }
+      throw error;
     }
   }
 }

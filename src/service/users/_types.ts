@@ -1,27 +1,34 @@
-type User = {
+import { UserPermission } from "../../entities/user/UserPermission";
+
+export type UserType = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  admin?: boolean;
-  is_active?: boolean;
+  isActive?: boolean;
+  permissions: UserPermission[];
 };
 
-type UserCreate = Omit<User, "id"> & {
+export type UserCreateType = Omit<UserType, "id"> & {
   password: string;
 };
 
-type UserUpdate = Partial<User> & {
+export type UserUpdateType = Partial<UserType> & {
   password?: string;
+  permissions?: UserPermission[];
 };
 
-type UserRequest = {
+export type UserRequestType = {
   email: string;
   password: string;
 };
 
-type UserResponse = Omit<User, "password">;
+export type UserResponseType = Omit<UserType, "password">;
 
-type UserId = {
+export type UserIdType = {
   id: string;
+};
+
+export type FindUserPermission = {
+  permissions: { type: string }[];
 };

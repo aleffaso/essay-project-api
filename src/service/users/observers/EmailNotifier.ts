@@ -1,3 +1,5 @@
+import { User } from "../../../entities/user/User";
+
 export interface UserCreatedObserver {
   notify(user: User): void;
 }

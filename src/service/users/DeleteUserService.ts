@@ -1,10 +1,11 @@
 import { AppDataSource } from "../../data-source";
 
-import { User as UserTable } from "../../entities/User";
+import { User as UserTable } from "../../entities/user/User";
 import { DoesNotExistError } from "../../errors";
+import { UserIdType } from "./_types";
 
 export class DeleteUserService {
-  async execute({ id }: UserId) {
+  async execute({ id }: UserIdType) {
     try {
       const userRepo = AppDataSource.getRepository(UserTable);
       const user = await userRepo.findOne({ where: { id } });
@@ -15,12 +16,7 @@ export class DeleteUserService {
 
       return await userRepo.delete({ id });
     } catch (error) {
-      if (error instanceof DoesNotExistError) {
-        return {
-          message: error.name,
-          status_code: error.status(),
-        };
-      }
+      throw error;
     }
   }
 }

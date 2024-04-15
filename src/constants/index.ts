@@ -23,7 +23,7 @@ export const KEYS = {
     ADMIN_PASSWORD: (process.env.ADMIN_USERNAME as string) ?? "Admin",
   },
   JWT: {
-    STUDENT: (process.env.JWT_KEY_TOKEN_STUDENT as string) ?? "",
+    USER: (process.env.JWT_KEY_TOKEN_USER as string) ?? "",
     TOKEN_EXPIRES_IN: (process.env.JWT_TOKEN_EXPIRES_IN as string) ?? "1d",
   },
 };

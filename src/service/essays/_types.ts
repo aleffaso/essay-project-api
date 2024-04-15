@@ -1,21 +1,28 @@
-type Essay = {
-  id: string;
-  title: string;
-  author: string;
-  text: string;
-  amazonLink?: string;
-  status?: string;
-  tags?: string;
-};
+// import { EssayUpdate } from "../../entities/essay/EssayUpdate";
+// import { User } from "../../entities/user/User";
 
-type EssayCreate = Omit<Essay, "id" | "created_at" | "updated_at">;
+// export type EssayType = {
+//   id: string;
+//   title: string;
+//   text: string;
+//   essayUploadedLink: string;
+//   status: string;
+//   tags: string;
+//   author: User;
+//   updates: EssayUpdate;
+// };
 
-type EssayUpdate = Partial<
-  Pick<Essay, "title" | "text" | "amazonLink" | "tags">
-> & {
-  id: string;
-};
+// export type EssayCreateType = Omit<
+//   EssayType,
+//   "id" | "created_at" | "updated_at"
+// >;
 
-type EssayId = {
-  id: string;
-};
+// export type EssayUpdateType = Partial<
+//   Pick<EssayType, "title" | "text" | "essayUploadedLink" | "tags">
+// > & {
+//   id: string;
+// };
+
+// export type EssayIdType = {
+//   id: string;
+// };

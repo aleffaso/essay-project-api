@@ -11,6 +11,6 @@ export const AppDataSource = new DataSource({
   database: KEYS.ORM_CONFIG.DB,
   logging: false,
   synchronize: false,
-  entities: [`${__dirname}/entities/*.{ts,js}`],
+  entities: [`${__dirname}/entities/**/*.{ts,js}`],
   migrations: [`${__dirname}/database/migrations/*.{ts,js}`],
 });
