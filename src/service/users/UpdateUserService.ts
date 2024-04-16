@@ -2,11 +2,16 @@ import bcrypt from "bcrypt";
 
 import { AppDataSource } from "../../data-source";
 import { User as UserTable } from "../../entities/user/User";
-import { AlreadyExistsError, DoesNotExistError } from "../../errors";
+import {
+  AlreadyExistsError,
+  DoesNotExistError,
+  ForbiddenError,
+} from "../../errors";
 import { UserUpdatedObserver } from "./observers/EmailNotifier";
 import { UserUpdateType } from "./_types";
 import { In } from "typeorm";
 import { UserPermission } from "../../entities/user/UserPermission";
+import { getPermissions } from "./PermissionsUserService";
 
 export class UpdateUserService {
   private readonly observer: UserUpdatedObserver;
@@ -15,21 +20,33 @@ export class UpdateUserService {
     this.observer = observer;
   }
 
-  async execute({
-    id,
-    firstName,
-    lastName,
-    email,
-    isActive,
-    password,
-    permissions,
-  }: UserUpdateType) {
+  async execute(
+    authorization: any,
+    {
+      id,
+      firstName,
+      lastName,
+      email,
+      isActive,
+      password,
+      permissions,
+    }: UserUpdateType
+  ) {
     try {
       const userRepo = AppDataSource.getRepository(UserTable);
       const user = await userRepo.findOne({
         where: { id },
         relations: ["permissions"],
       });
+
+      const permissionsResult = await getPermissions(
+        authorization,
+        this.constructor.name
+      );
+
+      if (!permissionsResult.hasPermissions) {
+        throw new ForbiddenError();
+      }
 
       if (!user) {
         throw new DoesNotExistError("User does not exist");

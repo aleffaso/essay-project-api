@@ -4,12 +4,8 @@ import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import { KEYS } from "../constants";
 import { DoesNotExistError } from "../errors";
 
-interface CustomRequest extends Request {
-  userId?: string;
-}
-
 export default async function userAuthMiddleware(
-  req: CustomRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) {
@@ -23,7 +19,9 @@ export default async function userAuthMiddleware(
     const token = authorization.replace("Bearer", "").trim();
 
     const { id } = jwt.verify(token, KEYS.JWT.USER) as TokenPayload;
+
     req.userId = id;
+
     return next();
   } catch (error) {
     if (error instanceof JsonWebTokenError) {

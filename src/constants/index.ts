@@ -17,13 +17,23 @@ export const KEYS = {
     PORT: Number(process.env.ORM_CONFIG_PORT as string) ?? undefined,
   },
   ADMIN: {
-    ADMIN_FIRSTNAME: (process.env.ADMIN_FIRSTNAME as string) ?? "Admin",
-    ADMIN_LASTNAME: (process.env.ADMIN_LASTNAME as string) ?? "Project",
-    ADMIN_EMAIL: (process.env.ADMIN_USERNAME as string) ?? "admin@example.com",
-    ADMIN_PASSWORD: (process.env.ADMIN_USERNAME as string) ?? "Admin",
+    FIRSTNAME: (process.env.ADMIN_FIRSTNAME as string) ?? "Admin",
+    LASTNAME: (process.env.ADMIN_LASTNAME as string) ?? "Project",
+    EMAIL: (process.env.ADMIN_USERNAME as string) ?? "admin@example.com",
+    PASSWORD: (process.env.ADMIN_USERNAME as string) ?? "Admin",
+    PERMISSION: (process.env.ADMIN as string) ?? "Admin",
   },
   JWT: {
     USER: (process.env.JWT_KEY_TOKEN_USER as string) ?? "",
     TOKEN_EXPIRES_IN: (process.env.JWT_TOKEN_EXPIRES_IN as string) ?? "1d",
   },
+};
+
+export const PERMISSION_LEVELS = {
+  ADMIN: (process.env.ADMIN as string) ?? undefined,
+  USER: (process.env.USER as string) ?? undefined,
+  CUSTOMER: (process.env.CUSTOMER as string) ?? undefined,
+  FINANCIAL: (process.env.FINANCIAL as string) ?? undefined,
+  SUPPORT: (process.env.SUPPORT as string) ?? undefined,
+  DEVELOPER: (process.env.DEVELOPER as string) ?? undefined,
 };

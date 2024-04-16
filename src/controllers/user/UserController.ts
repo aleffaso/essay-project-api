@@ -28,13 +28,14 @@ export default new (class UserController {
   }
 
   async create(req: Request, res: Response) {
+    const authorization = req.headers.authorization;
     const { firstName, lastName, email, password, isActive, permissions } =
       req.body;
     try {
       const createUserService = new CreateUserService(
         new EmailCreationNotifier()
       );
-      const userRequest = await createUserService.execute({
+      const userRequest = await createUserService.execute(authorization, {
         firstName,
         lastName,
         email,
@@ -49,6 +50,7 @@ export default new (class UserController {
     }
   }
   async update(req: Request, res: Response) {
+    const authorization = req.headers.authorization;
     const { id } = req.params;
     const { firstName, lastName, email, isActive, password, permissions } =
       req.body;
@@ -57,7 +59,7 @@ export default new (class UserController {
         new EmailUpdateNotifier()
       );
 
-      const userRequest = await updateUserService.execute({
+      const userRequest = await updateUserService.execute(authorization, {
         id,
         firstName,
         lastName,
@@ -76,9 +78,10 @@ export default new (class UserController {
   async get(req: Request, res: Response) {
     const { id } = req.params;
     try {
+      const authorization = req.headers.authorization;
       const getUserService = new GetUserService();
 
-      const user = await getUserService.execute({ id });
+      const user = await getUserService.execute(authorization, { id });
 
       return res.json(user);
     } catch (error) {
@@ -108,11 +111,12 @@ export default new (class UserController {
   }
 
   async delete(req: Request, res: Response) {
+    const authorization = req.headers.authorization;
     const { id } = req.params;
     try {
       const deleteUserService = new DeleteUserService();
 
-      await deleteUserService.execute({
+      await deleteUserService.execute(authorization, {
         id,
       });
 

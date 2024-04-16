@@ -2,11 +2,12 @@ import bcrypt from "bcrypt";
 
 import { AppDataSource } from "../../data-source";
 import { User as UserTable } from "../../entities/user/User";
-import { AlreadyExistsError } from "../../errors";
+import { AlreadyExistsError, ForbiddenError } from "../../errors";
 import { UserCreatedObserver } from "./observers/EmailNotifier";
 import { In } from "typeorm";
 import { UserCreateType, UserResponseType } from "./_types";
 import { UserPermission } from "../../entities/user/UserPermission";
+import { getPermissions } from "./PermissionsUserService";
 
 export class CreateUserService {
   private readonly observer: UserCreatedObserver;
@@ -14,17 +15,29 @@ export class CreateUserService {
   constructor(observer: UserCreatedObserver) {
     this.observer = observer;
   }
-  async execute({
-    firstName,
-    lastName,
-    email,
-    password,
-    isActive,
-    permissions,
-  }: UserCreateType) {
+  async execute(
+    authorization: any,
+    {
+      firstName,
+      lastName,
+      email,
+      password,
+      isActive,
+      permissions,
+    }: UserCreateType
+  ) {
     try {
       const userRepo = AppDataSource.getRepository(UserTable);
       const userAlreadyExists = await userRepo.findOne({ where: { email } });
+
+      const permissionsResult = await getPermissions(
+        authorization,
+        this.constructor.name
+      );
+
+      if (!permissionsResult.hasPermissions) {
+        throw new ForbiddenError();
+      }
 
       if (userAlreadyExists) {
         throw new AlreadyExistsError("User already exists");
