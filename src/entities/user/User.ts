@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {
   Entity,
   Column,
@@ -15,19 +16,19 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: "varchar" })
   firstName: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: "varchar" })
   lastName: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: "varchar" })
   email: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: "varchar" })
   password: string;
 
-  @Column({ nullable: false, default: true })
+  @Column({ nullable: false, default: true, type: "boolean" })
   isActive: boolean;
 
   @CreateDateColumn()

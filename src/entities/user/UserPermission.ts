@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuid } from "uuid";
 
@@ -6,7 +7,7 @@ export class UserPermission {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: "varchar" })
   type: string;
 
   constructor(type: string) {

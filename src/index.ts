@@ -10,6 +10,7 @@ import userRouter from "./routes/user/user";
 import userPermissionRouter from "./routes/user/permission";
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 

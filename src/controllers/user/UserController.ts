@@ -14,16 +14,16 @@ export default new (class UserController {
   async authenticate(req: Request, res: Response) {
     const { email, password } = req.body;
     try {
-      const authenticateStudentService = new AuthenticateUserService();
+      const authenticateUserService = new AuthenticateUserService();
 
-      const authenticate = await authenticateStudentService.execute({
+      const { user, token } = await authenticateUserService.execute({
         email,
         password,
       });
 
-      return res.json(authenticate);
+      return res.status(200).json({ user, token });
     } catch (error) {
-      res.json({ error: error });
+      return res.status(401).json({ error: "Invalid credentials" });
     }
   }
 
