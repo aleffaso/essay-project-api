@@ -37,7 +37,7 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToMany(() => UserPermission)
+  @ManyToMany(() => UserPermission, { nullable: true })
   @JoinTable()
   permissions: UserPermission[];
 
