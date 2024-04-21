@@ -5,7 +5,7 @@ import { AuthenticateUserService } from "../../service/users/AuthenticateUserSer
 jest.mock("../../service/users/AuthenticateUserService");
 
 describe("UserController", () => {
-  describe("POST on /user/authenticate", () => {
+  describe("POST on /user/authenticate route", () => {
     const request = {
       body: {
         email: "test@example.com",
