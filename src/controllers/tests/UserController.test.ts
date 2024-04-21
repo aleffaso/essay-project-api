@@ -5,74 +5,70 @@ import { AuthenticateUserService } from "../../service/users/AuthenticateUserSer
 jest.mock("../../service/users/AuthenticateUserService");
 
 describe("UserController", () => {
-  describe("authenticate", () => {
-    const requestBody = {
-      email: "test@example.com",
-      password: "testing1234",
+  describe("POST on /user/authenticate", () => {
+    const request = {
+      body: {
+        email: "test@example.com",
+        password: "testing1234",
+      },
     };
 
-    const expectedUser = {
-      id: "ec71bc...",
-      firstName: "Test",
-      lastName: "User",
-      email: "test@example.com",
-      permissions: ["admin"],
-    };
-    const expectedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
+    const mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
 
-    it("should authenticate user and status code 200", async () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it("should return 'Invalid credentials' and return status code 401", async () => {
       (
         AuthenticateUserService as jest.MockedClass<
           typeof AuthenticateUserService
         >
       ).mockImplementationOnce(() => ({
-        execute: jest.fn().mockResolvedValueOnce({
-          user: expectedUser,
-          token: expectedToken,
-        }),
+        execute: jest.fn().mockRejectedValue(new Error("Invalid credentials")),
       }));
 
-      const response: Partial<Response> = {
-        json: jest.fn(),
-        status: jest.fn().mockReturnThis(),
-      };
+      await UserController.authenticate(request as Request, mockResponse);
 
-      await UserController.authenticate(
-        { body: requestBody } as Request,
-        response as Response
-      );
-
-      expect(response.status).toHaveBeenCalledWith(200);
-      expect(response.json).toHaveBeenCalledWith({
-        user: expectedUser,
-        token: expectedToken,
+      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        error: "Invalid credentials",
       });
     });
 
-    it("should return 'Invalid credentials' and status code 401", async () => {
+    it("should return user and token and return status code 200", async () => {
       (
         AuthenticateUserService as jest.MockedClass<
           typeof AuthenticateUserService
         >
       ).mockImplementationOnce(() => ({
-        execute: jest
-          .fn()
-          .mockRejectedValueOnce(new Error("Invalid credentials")),
+        execute: jest.fn().mockResolvedValue({
+          user: {
+            id: "ec71bc...",
+            firstName: "Test",
+            lastName: "User",
+            email: "valid@example.com",
+            permissions: ["ADMIN", "DEVELOPER"],
+          },
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....",
+        }),
       }));
 
-      const response: Partial<Response> = {
-        json: jest.fn(),
-        status: jest.fn().mockReturnThis(),
-      };
+      await UserController.authenticate(request as Request, mockResponse);
 
-      await UserController.authenticate(
-        { body: requestBody } as Request,
-        response as Response
-      );
-
-      expect(response.status).toHaveBeenCalledWith(401);
-      expect(response.json).toHaveBeenCalledWith({
-        error: "Invalid credentials",
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        user: {
+          id: "ec71bc...",
+          firstName: "Test",
+          lastName: "User",
+          email: "valid@example.com",
+          permissions: ["ADMIN", "DEVELOPER"],
+        },
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....",
       });
     });
   });

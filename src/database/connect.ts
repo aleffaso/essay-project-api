@@ -7,3 +7,5 @@ AppDataSource.initialize()
   .catch((err: any) => {
     console.log("Error during Data Source initialization: ", err);
   });
+
+export { AppDataSource };

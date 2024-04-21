@@ -20,12 +20,7 @@ class AuthenticateUserService {
         throw new DoesNotExistError("Invalid email or password");
       }
 
-      const isValidPassword = await bcrypt.compare(
-        password as string,
-        user.password
-      );
-
-      if (!isValidPassword) {
+      if (!(await bcrypt.compare(password as string, user.password))) {
         throw new DoesNotExistError("Invalid email or password");
       }
 
