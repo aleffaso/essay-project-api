@@ -26,5 +26,8 @@ jobs:
         run: npm run test
 
       - name: Check code coverage
-        run: npm run test-coverage 
+        run: npm run test:coverage
+
+      - name: Check code badges
+        run: npm run test:badges
 
