@@ -6,20 +6,19 @@ The main purpose of this project is to create an API for managing essay correcti
 
 ## Code Coverage
 
-![Coverage Status](./coverage/badge-branches.svg)
-![Coverage Status](./coverage/badge-functions.svg)
-![Coverage Status](./coverage/badge-lines.svg)
-![Coverage Status](./coverage/badge-statements.svg)
+![Branches](./coverage/badge-branches.svg)
+![Functions](./coverage/badge-functions.svg)
+![Lines](./coverage/badge-lines.svg)
+![Statements](./coverage/badge-statements.svg)
 
 ## Dependencies
 
-- dotenv: Loads environment variables from a `.env` file into `process.env`.
-
-- jsonwebtoken: Implements JSON Web Tokens (JWT) for authentication.
-
-- pg: Node.js PostgreSQL client library.
-
-- typeorm: Object-Relational Mapping (ORM) library for TypeScript and JavaScript.
+- `bcrypt`: A library for hashing passwords.
+- `dotenv`: Loads environment variables from a `.env` file into `process.env`.
+- `jsonwebtoken`: Implements JSON Web Tokens (JWT) for authentication.
+- `pg`: Node.js PostgreSQL client library.
+- `reflect-metadata`: Provides reflection capabilities for TypeScript.
+- `typeorm`: Object-Relational Mapping (ORM) library for TypeScript and JavaScript.
 
 ## Clone the Repository
 
@@ -43,12 +42,12 @@ To run the application, execute the following command:
 
 ## Congrats, your API is running
 
-`web_1  | Server started at http://localhost:80`
-`web_1  | Data Source has been initialized`
+`web_1 | Server started at http://localhost:80`
+`web_1 | Data Source has been initialized`
 
-### To check health system you may go on Postman and run the following route
+### To check the health system, you may go to Postman and run the following route:
 
-`http:localhost:80/`
+`http:localhost:80`
 
 ### Response
 
