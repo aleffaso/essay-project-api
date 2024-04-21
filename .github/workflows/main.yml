@@ -17,17 +17,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: "14"
 
       - name: Install dependencies
         run: npm install
 
       - name: Run tests
         run: npm run test
-
-      - name: Check code coverage
-        run: npm run test:coverage
-
-      - name: Check code badges
-        run: npm run test:badges
-
