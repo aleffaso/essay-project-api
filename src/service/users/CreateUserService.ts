@@ -43,13 +43,11 @@ export class CreateUserService {
         throw new AlreadyExistsError("User already exists");
       }
 
-      const hashedPassword = bcrypt.hashSync(password as string, 10);
-
       const user = userRepo.create({
         firstName,
         lastName,
         email,
-        password: hashedPassword,
+        password: bcrypt.hashSync(password as string, 10),
         isActive,
       });
 

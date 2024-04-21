@@ -1,8 +1,8 @@
 {
   "name": "essay-project-api",
   "version": "1.0.0",
-  "description": "## Overview",
-  "main": "index.js",
+  "description": "API for managing essay corrections",
+  "main": "index.ts",
   "scripts": {
     "dev": "npx nodemon --exec ts-node src/index.ts",
     "migration:generate": "npx typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/database/migrations/default",
@@ -10,7 +10,7 @@
     "typeorm": "npx typeorm-ts-node-commonjs",
     "initialConfig": "npx ts-node src/config/index.ts",
     "test": "jest",
-    "test:coverage": "npm test -- --coverage",
+    "test:coverage": "npm test --coverage",
     "test:badges": "npm run test:coverage  && jest-coverage-badges"
   },
   "jest": {
@@ -33,7 +33,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
-    "jest-coverage-badges": "^1.1.2",
+    "jest-coverage-badges": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.5",
     "reflect-metadata": "^0.2.2",
