@@ -10,7 +10,15 @@
     "typeorm": "npx typeorm-ts-node-commonjs",
     "initialConfig": "npx ts-node src/config/index.ts",
     "test": "jest",
-    "test-coverage": "jest --coverage"
+    "test:coverage": "npm test -- --coverage",
+    "test:badges": "npm run test:coverage  && jest-coverage-badges"
+  },
+  "jest": {
+    "coverageReporters": [
+      "json-summary",
+      "text",
+      "lcov"
+    ]
   },
   "repository": {
     "type": "git",
@@ -25,6 +33,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
+    "jest-coverage-badges": "^1.1.2",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.5",
     "reflect-metadata": "^0.2.2",

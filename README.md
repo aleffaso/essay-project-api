@@ -4,6 +4,13 @@
 
 The main purpose of this project is to create an API for managing essay corrections.
 
+## Code Coverage
+
+![Coverage Status](./coverage/badge-branches.svg)
+![Coverage Status](./coverage/badge-functions.svg)
+![Coverage Status](./coverage/badge-lines.svg)
+![Coverage Status](./coverage/badge-statements.svg)
+
 ## Dependencies
 
 - dotenv: Loads environment variables from a `.env` file into `process.env`.
