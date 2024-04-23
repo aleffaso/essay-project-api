@@ -1,9 +1,9 @@
 import jwt, { JsonWebTokenError } from "jsonwebtoken";
 
-import { KEYS, PERMISSION_LEVELS } from "../../constants";
-import { AppDataSource } from "../../data-source";
-import { User as UserTable } from "../../entities/user/User";
-import { DoesNotExistError } from "../../errors";
+import { KEYS, PERMISSION_LEVELS } from "../constants";
+import { AppDataSource } from "../data-source";
+import { User as UserTable } from "../entities/user/User";
+import { DoesNotExistError } from "../errors";
 
 export async function getPermissions(
   authorization: string,
@@ -46,6 +46,8 @@ export async function getPermissions(
     throw error;
   }
 }
+
+// User service
 
 export const AuthenticateUserServicePermissions = (
   userPermissions: string[]
@@ -115,6 +117,16 @@ export const UpdateUserServicePermissions = (userPermissions: string[]) => {
   );
 };
 
+//Permission service
+
+export const CreateUserPermissionsService = (userPermissions: string[]) => {
+  return userPermissions.includes(PERMISSION_LEVELS.ADMIN);
+};
+
+export const ListUserPermissionsService = (userPermissions: string[]) => {
+  return userPermissions.includes(PERMISSION_LEVELS.ADMIN);
+};
+
 type ServicePermissionMap = {
   [key: string]: (userPermissions: string[]) => boolean;
 };
@@ -125,4 +137,7 @@ const servicePermissionsMap: ServicePermissionMap = {
   CreateUserService: CreateUserServicePermissions,
   UpdateUserService: UpdateUserServicePermissions,
   DeleteUserService: DeleteUserServicePermissions,
+
+  CreateUserPermissionsService: CreateUserPermissionsService,
+  ListUserPermissionsService: ListUserPermissionsService,
 };

@@ -52,3 +52,17 @@ To run the application, execute the following command:
 ### Response
 
 `{"message": "API online","status_code": 200}`
+
+### Initial configuration
+
+#### Important: Do not forget to create `.env` file and put `.env_example` variables accordingly. All initial configuration are from this file
+
+1 - Go into bash using `docker exec -it essay-project-api-web bash`
+
+2 - Then now run the following command to create user permissions `npm run createUserPermissions`
+
+3 - After that, run the following command to create superuser `npm run createSuperUser`
+
+Great! You have created a superuser and also all required permissions to access the system via postman or insomnia
+
+## Testing routes TODO

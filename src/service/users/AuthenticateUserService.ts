@@ -5,7 +5,7 @@ import { AppDataSource } from "../../data-source";
 import { User as UserTable } from "../../entities/user/User";
 import { KEYS } from "../../constants";
 import { DoesNotExistError } from "../../errors";
-import { UserRequestType } from "./_types";
+import { UserRequestType, UserType } from "./_types";
 
 class AuthenticateUserService {
   async execute({ email, password }: UserRequestType) {
@@ -28,14 +28,16 @@ class AuthenticateUserService {
         expiresIn: KEYS.JWT.TOKEN_EXPIRES_IN,
       });
 
+      const userResponse = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: email,
+        permissions: user.permissions.map((permission) => permission.type),
+      };
+
       return {
-        user: {
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: email,
-          permissions: user.permissions.map((permission) => permission.type),
-        },
+        user: userResponse,
         token,
       };
     } catch (error) {

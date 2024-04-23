@@ -9,6 +9,11 @@ import { ListUsersService } from "../../service/users/ListUsersService";
 import { GetUserService } from "../../service/users/GetUserService";
 import { DeleteUserService } from "../../service/users/DeleteUserService";
 import { AuthenticateUserService } from "../../service/users/AuthenticateUserService";
+import {
+  DoesNotExistError,
+  ForbiddenError,
+  AlreadyExistsError,
+} from "../../errors";
 
 export default new (class UserController {
   async authenticate(req: Request, res: Response) {
@@ -23,7 +28,13 @@ export default new (class UserController {
 
       return res.status(200).json({ user, token });
     } catch (error) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      if (error instanceof DoesNotExistError) {
+        const { statusCode, statusMessage } = error;
+        return res.status(statusCode).json({ error: statusMessage });
+      }
+      return res
+        .status(500)
+        .json({ error: error, message: "Internal Server Error" });
     }
   }
 
@@ -44,9 +55,18 @@ export default new (class UserController {
         permissions,
       });
 
-      return res.json(userRequest);
+      return res.status(200).json(userRequest);
     } catch (error) {
-      res.json({ error: error });
+      if (
+        error instanceof ForbiddenError ||
+        error instanceof AlreadyExistsError
+      ) {
+        const { statusCode, statusMessage } = error;
+        return res.status(statusCode).json({ error: statusMessage });
+      }
+      return res
+        .status(500)
+        .json({ error: error, message: "Internal Server Error" });
     }
   }
   async update(req: Request, res: Response) {
@@ -69,9 +89,19 @@ export default new (class UserController {
         permissions,
       });
 
-      return res.json(userRequest);
+      return res.status(200).json(userRequest);
     } catch (error) {
-      res.json({ error: error });
+      if (
+        error instanceof ForbiddenError ||
+        error instanceof DoesNotExistError ||
+        error instanceof AlreadyExistsError
+      ) {
+        const { statusCode, statusMessage } = error;
+        return res.status(statusCode).json({ error: statusMessage });
+      }
+      return res
+        .status(500)
+        .json({ error: error, message: "Internal Server Error" });
     }
   }
 
@@ -83,9 +113,18 @@ export default new (class UserController {
 
       const user = await getUserService.execute(authorization, { id });
 
-      return res.json(user);
+      return res.status(200).json(user);
     } catch (error) {
-      res.json({ error: error });
+      if (
+        error instanceof ForbiddenError ||
+        error instanceof DoesNotExistError
+      ) {
+        const { statusCode, statusMessage } = error;
+        return res.status(statusCode).json({ error: statusMessage });
+      }
+      return res
+        .status(500)
+        .json({ error: error, message: "Internal Server Error" });
     }
   }
 
@@ -104,9 +143,18 @@ export default new (class UserController {
         parsedLimit
       );
 
-      return res.json(users);
+      return res.status(200).json(users);
     } catch (error) {
-      res.json({ error: error });
+      if (
+        error instanceof ForbiddenError ||
+        error instanceof DoesNotExistError
+      ) {
+        const { statusCode, statusMessage } = error;
+        return res.status(statusCode).json({ error: statusMessage });
+      }
+      return res
+        .status(500)
+        .json({ error: error, message: "Internal Server Error" });
     }
   }
 
@@ -124,7 +172,16 @@ export default new (class UserController {
         message: "Deleted successfully",
       });
     } catch (error) {
-      res.json({ error: error });
+      if (
+        error instanceof ForbiddenError ||
+        error instanceof DoesNotExistError
+      ) {
+        const { statusCode, statusMessage } = error;
+        return res.status(statusCode).json({ error: statusMessage });
+      }
+      return res
+        .status(500)
+        .json({ error: error, message: "Internal Server Error" });
     }
   }
 })();

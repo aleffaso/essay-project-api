@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JsonWebTokenError } from "jsonwebtoken";
 
 import { KEYS } from "../constants";
-import { DoesNotExistError } from "../errors";
 
 export default async function userAuthMiddleware(
   req: Request,
@@ -13,9 +12,8 @@ export default async function userAuthMiddleware(
     const { authorization } = req.headers;
 
     if (!authorization) {
-      throw new DoesNotExistError("Invalid token");
+      return res.status(401).json({ error: "Invalid token" });
     }
-
     const token = authorization.replace("Bearer", "").trim();
 
     const { id } = jwt.verify(token, KEYS.JWT.USER) as TokenPayload;
@@ -25,7 +23,7 @@ export default async function userAuthMiddleware(
     return next();
   } catch (error) {
     if (error instanceof JsonWebTokenError) {
-      throw new DoesNotExistError("Invalid token");
+      return res.status(401).json({ error: "Invalid token" });
     }
     throw error;
   }

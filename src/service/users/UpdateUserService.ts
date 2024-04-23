@@ -11,7 +11,7 @@ import { UserUpdatedObserver } from "./observers/EmailNotifier";
 import { UserUpdateType } from "./_types";
 import { In } from "typeorm";
 import { UserPermission } from "../../entities/user/UserPermission";
-import { getPermissions } from "./PermissionsUserService";
+import { getPermissions } from "../PermissionsUserService";
 
 export class UpdateUserService {
   private readonly observer: UserUpdatedObserver;
@@ -33,20 +33,20 @@ export class UpdateUserService {
     }: UserUpdateType
   ) {
     try {
-      const userRepo = AppDataSource.getRepository(UserTable);
-      const user = await userRepo.findOne({
-        where: { id },
-        relations: ["permissions"],
-      });
-
       const permissionsResult = await getPermissions(
         authorization,
         this.constructor.name
       );
 
       if (!permissionsResult.hasPermissions) {
-        throw new ForbiddenError();
+        throw new ForbiddenError("You do not have permission");
       }
+
+      const userRepo = AppDataSource.getRepository(UserTable);
+      const user = await userRepo.findOne({
+        where: { id },
+        relations: ["permissions"],
+      });
 
       if (!user) {
         throw new DoesNotExistError("User does not exist");
@@ -87,7 +87,6 @@ export class UpdateUserService {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        password: user.password,
         isActive: user.isActive,
         permissions: user.permissions,
       };

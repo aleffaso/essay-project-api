@@ -1,11 +1,21 @@
 import { AppDataSource } from "../../data-source";
 import { UserPermission as UserPermissionTable } from "../../entities/user/UserPermission";
-import { AlreadyExistsError } from "../../errors";
+import { AlreadyExistsError, ForbiddenError } from "../../errors";
+import { getPermissions } from "../PermissionsUserService";
 import { UserPermissionCreateType, UserPermissionType } from "./_types";
 
 export class CreateUserPermissionService {
-  async execute({ type }: UserPermissionCreateType) {
+  async execute(authorization: any, { type }: UserPermissionCreateType) {
     try {
+      const permissionsResult = await getPermissions(
+        authorization,
+        this.constructor.name
+      );
+
+      if (!permissionsResult.hasPermissions) {
+        throw new ForbiddenError("You do not have permission");
+      }
+
       const userPermissionRepo =
         AppDataSource.getRepository(UserPermissionTable);
       const userPermissionAlreadyExists = await userPermissionRepo.findOne({

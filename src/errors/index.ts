@@ -23,8 +23,8 @@ export class AlreadyExistsError extends CustomError {
 }
 
 export class ForbiddenError extends CustomError {
-  constructor() {
-    super("ForbiddenError", "You do not have permission to access this", 403);
+  constructor(message: string) {
+    super("ForbiddenError", message, 403);
   }
 }
 

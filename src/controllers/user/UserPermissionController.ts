@@ -1,19 +1,36 @@
 import { Request, Response } from "express";
 import { CreateUserPermissionService } from "../../service/user-permissions/CreateUserPermissionService";
 import { ListUserPermissionsService } from "../../service/user-permissions/ListUserPermissionsService";
+import {
+  AlreadyExistsError,
+  DoesNotExistError,
+  ForbiddenError,
+} from "../../errors";
 
 export default new (class UserPermissionController {
   async create(req: Request, res: Response) {
+    const authorization = req.headers.authorization;
     const { type } = req.body;
     try {
       const createUserPermissionService = new CreateUserPermissionService();
-      const userPermissionRequest = await createUserPermissionService.execute({
-        type,
-      });
+      const userPermissionRequest = await createUserPermissionService.execute(
+        authorization,
+        {
+          type,
+        }
+      );
 
-      return res.json(userPermissionRequest);
+      return res.status(200).json(userPermissionRequest);
     } catch (error) {
-      res.json({ error: error });
+      if (
+        error instanceof DoesNotExistError ||
+        error instanceof ForbiddenError ||
+        error instanceof AlreadyExistsError
+      ) {
+        const { statusCode, statusMessage } = error;
+        return res.status(statusCode).json({ error: statusMessage });
+      }
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
@@ -32,9 +49,16 @@ export default new (class UserPermissionController {
         parsedLimit
       );
 
-      return res.json(permissions);
+      return res.status(200).json(permissions);
     } catch (error) {
-      res.json({ error: error });
+      if (
+        error instanceof DoesNotExistError ||
+        error instanceof ForbiddenError
+      ) {
+        const { statusCode, statusMessage } = error;
+        return res.status(statusCode).json({ error: statusMessage });
+      }
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
 })();

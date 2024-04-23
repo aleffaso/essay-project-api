@@ -17,11 +17,11 @@ export const KEYS = {
     PORT: Number(process.env.ORM_CONFIG_PORT as string) ?? undefined,
   },
   ADMIN: {
-    FIRSTNAME: (process.env.ADMIN_FIRSTNAME as string) ?? "Admin",
-    LASTNAME: (process.env.ADMIN_LASTNAME as string) ?? "Project",
-    EMAIL: (process.env.ADMIN_USERNAME as string) ?? "admin@example.com",
-    PASSWORD: (process.env.ADMIN_USERNAME as string) ?? "Admin",
-    PERMISSION: (process.env.ADMIN as string) ?? "Admin",
+    FIRSTNAME: (process.env.ADMIN_FIRSTNAME as string) ?? "",
+    LASTNAME: (process.env.ADMIN_LASTNAME as string) ?? "",
+    EMAIL: (process.env.ADMIN_EMAIL as string) ?? "",
+    PASSWORD: (process.env.ADMIN_PASSWORD as string) ?? "",
+    PERMISSION: (process.env.ADMIN as string) ?? "",
   },
   JWT: {
     USER: (process.env.JWT_KEY_TOKEN_USER as string) ?? "",

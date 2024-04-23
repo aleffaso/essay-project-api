@@ -8,7 +8,8 @@
     "migration:generate": "npx typeorm-ts-node-commonjs -d ./src/data-source.ts migration:generate ./src/database/migrations/default",
     "migration:run": "npx typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run",
     "typeorm": "npx typeorm-ts-node-commonjs",
-    "initialConfig": "npx ts-node src/config/index.ts",
+    "createUserPermissions": "npx ts-node src/config/index.ts CreateUserPermissions",
+    "createSuperUser": "npx ts-node src/config/index.ts CreateSuperUser",
     "test": "jest",
     "test:coverage": "npm test --coverage",
     "test:badges": "npm run test:coverage  && jest-coverage-badges"

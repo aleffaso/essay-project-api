@@ -1,11 +1,21 @@
 import { AppDataSource } from "../../data-source";
 
 import { UserPermission as UserPermissionTable } from "../../entities/user/UserPermission";
-import { DoesNotExistError } from "../../errors";
+import { DoesNotExistError, ForbiddenError } from "../../errors";
+import { getPermissions } from "../PermissionsUserService";
 
 export class ListUserPermissionsService {
   async execute(authorization: any, page: number, limit: number) {
     try {
+      const permissionsResult = await getPermissions(
+        authorization,
+        this.constructor.name
+      );
+
+      if (!permissionsResult.hasPermissions) {
+        throw new ForbiddenError("You do not have permission");
+      }
+
       const userPermissionRepo =
         AppDataSource.getRepository(UserPermissionTable);
 

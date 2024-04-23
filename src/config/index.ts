@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 import { AppDataSource } from "../data-source";
 import { PermissionType, superUser } from "../entities/user/Enum";
 import { UserPermission as UserPermissionTable } from "../entities/user/UserPermission";
@@ -6,11 +8,11 @@ import { KEYS } from "../constants";
 
 const handleCommand = async (command: string) => {
   switch (command) {
-    case "CreateSuperUser":
-      await createSuperUser();
-      break;
     case "CreateUserPermissions":
       await createUserPermissions();
+      break;
+    case "CreateSuperUser":
+      await createSuperUser();
       break;
     default:
       console.log("Unknown command");
@@ -71,8 +73,13 @@ export async function createSuperUser(): Promise<void> {
 
     const userRepo = AppDataSource.getRepository(UserTable);
 
+    const user = {
+      ...superUser,
+      password: bcrypt.hashSync(KEYS.ADMIN.PASSWORD, 10),
+    };
+
     try {
-      const createSuperUser = userRepo.create(superUser);
+      const createSuperUser = userRepo.create(user);
 
       const superUserPermission = KEYS.ADMIN.PERMISSION;
 
