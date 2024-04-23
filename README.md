@@ -6,10 +6,10 @@ The main purpose of this project is to create an API for managing essay correcti
 
 ## Code Coverage
 
-![Branches](./coverage/badge-branches.svg)
-![Functions](./coverage/badge-functions.svg)
-![Lines](./coverage/badge-lines.svg)
-![Statements](./coverage/badge-statements.svg)
+![Branches](https://img.shields.io/badge/Branches-blue)![Branches](./coverage/badge-branches.svg) <br>
+![Functions](https://img.shields.io/badge/Functions-blue)![Functions](./coverage/badge-functions.svg) <br>
+![Lines](https://img.shields.io/badge/Lines-blue)![Lines](./coverage/badge-lines.svg) <br>
+![Statements](https://img.shields.io/badge/Statements-blue)![Statements](./coverage/badge-statements.svg) <br>
 
 ## Dependencies
 
