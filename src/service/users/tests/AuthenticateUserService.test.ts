@@ -3,15 +3,7 @@ import jwt from "jsonwebtoken";
 import { DoesNotExistError } from "../../../errors";
 import { AuthenticateUserService } from "../AuthenticateUserService";
 
-jest.mock("../../../data-source.ts", () => ({
-  AppDataSource: {
-    getRepository: jest.fn().mockReturnValue({
-      findOne: jest.fn().mockResolvedValue(null),
-    }),
-  },
-}));
-
-const expectedValue = {
+const userResponse = {
   user: {
     id: "ec71bc...",
     firstName: "Test",
@@ -30,8 +22,11 @@ beforeEach(() => {
 
 describe("POST on /user/authenticate using UserService", () => {
   it("throws error for invalid email", async () => {
-    const bcryptCompare = jest.fn().mockResolvedValue(true);
-    (bcrypt.compare as jest.Mock) = bcryptCompare;
+    jest
+      .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
+      .mockReturnValue({
+        findOne: jest.fn().mockResolvedValue(null),
+      });
 
     const authenticateUserService = new AuthenticateUserService();
 
@@ -44,14 +39,14 @@ describe("POST on /user/authenticate using UserService", () => {
   });
 
   it("throws error for invalid password", async () => {
-    const bcryptCompare = jest.fn().mockResolvedValue(false);
-    (bcrypt.compare as jest.Mock) = bcryptCompare;
-
     jest
       .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
       .mockReturnValue({
-        findOne: jest.fn().mockResolvedValue(expectedValue.user),
+        findOne: jest.fn().mockResolvedValue(userResponse.user),
       });
+
+    const bcryptCompare = jest.fn().mockResolvedValue(false);
+    (bcrypt.compare as jest.Mock) = bcryptCompare;
 
     const authenticateUserService = new AuthenticateUserService();
 
@@ -64,37 +59,37 @@ describe("POST on /user/authenticate using UserService", () => {
   });
 
   it("throws user and token response", async () => {
-    const bcryptCompare = jest.fn().mockResolvedValue(true);
-    (bcrypt.compare as jest.Mock) = bcryptCompare;
-
-    const jwtSign = jest.fn().mockReturnValue(expectedValue.token);
-    (jwt as any).sign = jwtSign;
-
     jest
       .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
       .mockReturnValue({
-        findOne: jest.fn().mockResolvedValue(expectedValue.user),
+        findOne: jest.fn().mockResolvedValue(userResponse.user),
       });
+
+    const bcryptCompare = jest.fn().mockResolvedValue(true);
+    (bcrypt.compare as jest.Mock) = bcryptCompare;
+
+    const jwtSign = jest.fn().mockReturnValue(userResponse.token);
+    (jwt as any).sign = jwtSign;
 
     const authenticateUserService = new AuthenticateUserService();
 
-    const result = await authenticateUserService.execute({
+    const userRequest = await authenticateUserService.execute({
       email: "valid@example.com",
       password: "hashed_password",
     });
 
-    expect(result).toEqual(
+    expect(userRequest).toEqual(
       expect.objectContaining({
         user: {
-          id: expectedValue.user.id,
-          firstName: expectedValue.user.firstName,
-          lastName: expectedValue.user.lastName,
-          email: expectedValue.user.email,
-          permissions: expectedValue.user.permissions.map(
+          id: userResponse.user.id,
+          firstName: userResponse.user.firstName,
+          lastName: userResponse.user.lastName,
+          email: userResponse.user.email,
+          permissions: userResponse.user.permissions.map(
             (permission) => permission.type
           ),
         },
-        token: expectedValue.token,
+        token: userResponse.token,
       })
     );
   });
