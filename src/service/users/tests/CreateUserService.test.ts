@@ -1,4 +1,4 @@
-import bcrypt, { hashSync } from "bcrypt";
+import bcrypt from "bcrypt";
 import { AlreadyExistsError, ForbiddenError } from "../../../errors";
 import { CreateUserService } from "../CreateUserService";
 import * as PermissionsUserService from "../../PermissionsUserService";
@@ -10,7 +10,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("POST on /user using UserService", () => {
+describe("POST on /user using CreateUserService", () => {
   it("throws error: You do not have permission", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
@@ -20,7 +20,7 @@ describe("POST on /user using UserService", () => {
       email: "john@smith.com",
       password: "password",
       isActive: true,
-      permissions: [],
+      permissions: [] as unknown as UserPermission[],
     };
 
     jest
@@ -49,7 +49,7 @@ describe("POST on /user using UserService", () => {
       email: "john@smith.com",
       password: "password",
       isActive: true,
-      permissions: permissions as unknown as UserPermission[],
+      permissions: ["1", "2"] as unknown as UserPermission[],
     };
 
     const userResponse: UserResponseType = {
@@ -58,7 +58,7 @@ describe("POST on /user using UserService", () => {
       lastName: userRequest.lastName,
       email: userRequest.email,
       isActive: userRequest.isActive,
-      permissions: userRequest.permissions,
+      permissions: permissions as unknown as UserPermission[],
     };
 
     jest
