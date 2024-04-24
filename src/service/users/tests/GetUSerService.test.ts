@@ -1,14 +1,14 @@
 import { UserPermission } from "../../../entities/user/UserPermission";
-import { UserIdType, UserResponseType } from "../_types";
-import * as PermissionsUserService from "../../PermissionsUserService";
-import { DeleteUserService } from "../DeleteUserService";
 import { DoesNotExistError, ForbiddenError } from "../../../errors";
+import * as PermissionsUserService from "../../PermissionsUserService";
+import { GetUserService } from "../GetUserService";
+import { UserIdType, UserResponseType } from "../_types";
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("DELETE on /user using DeleteUserService", () => {
+describe("GET on /user using GetUserService", () => {
   it("throws error: You do not have permission", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
@@ -20,7 +20,7 @@ describe("DELETE on /user using DeleteUserService", () => {
       .spyOn(PermissionsUserService, "getPermissions")
       .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
-    const deleteUserService = new DeleteUserService();
+    const deleteUserService = new GetUserService();
 
     await expect(
       deleteUserService.execute(authorization, userId)
@@ -44,13 +44,12 @@ describe("DELETE on /user using DeleteUserService", () => {
         findOne: jest.fn().mockResolvedValue(false),
       });
 
-    const deleteUserService = new DeleteUserService();
+    const deleteUserService = new GetUserService();
 
     await expect(
       deleteUserService.execute(authorization, userId)
     ).rejects.toThrow(DoesNotExistError);
   });
-
   it("throws user deleted successfully", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
@@ -83,8 +82,10 @@ describe("DELETE on /user using DeleteUserService", () => {
         delete: jest.fn().mockResolvedValue({ userRequest }),
       });
 
-    const deleteUserService = new DeleteUserService();
+    const deleteUserService = new GetUserService();
 
-    expect(await deleteUserService.execute(authorization, userRequest));
+    const request = await deleteUserService.execute(authorization, userRequest);
+
+    expect(request).toEqual({ user: userResponse });
   });
 });
