@@ -1,38 +1,38 @@
 import { UserPermission } from "../../../entities/user/UserPermission";
-import { UserIdType, UserResponseType } from "../_types";
-import * as PermissionsUserService from "../../PermissionsUserService";
-import { DeleteUserService } from "../DeleteUserService";
 import { DoesNotExistError, ForbiddenError } from "../../../errors";
+import * as PermissionsUserService from "../../PermissionsUserService";
+import { ListUsersService } from "../ListUsersService";
+import { UserResponseType } from "../_types";
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("DELETE on /user using DeleteUserService", () => {
+describe("GET on /users using ListUserService", () => {
   it("throws error: You do not have permission", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
-    const userId = {
-      id: "3456-dfgh-5678-dfghj",
-    };
+    const page = 1;
+
+    const limit = 1;
 
     jest
       .spyOn(PermissionsUserService, "getPermissions")
       .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
-    const deleteUserService = new DeleteUserService();
+    const listUsersService = new ListUsersService();
 
     await expect(
-      deleteUserService.execute(authorization, userId)
+      listUsersService.execute(authorization, page, limit)
     ).rejects.toThrow(ForbiddenError);
   });
 
-  it("throws error: User does not exist", async () => {
+  it("throws error: You do not have permission", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
-    const userId = {
-      id: "",
-    };
+    const page = 1;
+
+    const limit = 10;
 
     jest
       .spyOn(PermissionsUserService, "getPermissions")
@@ -41,22 +41,22 @@ describe("DELETE on /user using DeleteUserService", () => {
     jest
       .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
       .mockReturnValue({
-        findOne: jest.fn().mockResolvedValue(false),
+        find: jest.fn().mockResolvedValue(false),
       });
 
-    const deleteUserService = new DeleteUserService();
+    const listUsersService = new ListUsersService();
 
     await expect(
-      deleteUserService.execute(authorization, userId)
+      listUsersService.execute(authorization, page, limit)
     ).rejects.toThrow(DoesNotExistError);
   });
 
-  it("returns user deleted successfully", async () => {
+  it("returns users list", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
-    const userRequest: UserIdType = {
-      id: "ec71bc...",
-    };
+    const page = 1;
+
+    const limit = 1;
 
     const permissionResponse = [
       { id: "1", type: "ADMIN" },
@@ -72,6 +72,7 @@ describe("DELETE on /user using DeleteUserService", () => {
       permissions: permissionResponse as unknown as UserPermission[],
     };
 
+    const usersResponse = [userResponse, userResponse];
     jest
       .spyOn(PermissionsUserService, "getPermissions")
       .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
@@ -79,12 +80,16 @@ describe("DELETE on /user using DeleteUserService", () => {
     jest
       .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
       .mockReturnValue({
-        findOne: jest.fn().mockResolvedValue(userResponse),
-        delete: jest.fn().mockResolvedValue({ userRequest }),
+        find: jest.fn().mockResolvedValue(usersResponse),
       });
 
-    const deleteUserService = new DeleteUserService();
+    const listUsersService = new ListUsersService();
 
-    expect(await deleteUserService.execute(authorization, userRequest));
+    const request = await listUsersService.execute(authorization, page, limit);
+
+    expect(request).toEqual({
+      count: usersResponse.length,
+      users: usersResponse,
+    });
   });
 });

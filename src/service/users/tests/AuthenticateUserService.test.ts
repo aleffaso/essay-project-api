@@ -58,7 +58,7 @@ describe("POST on /user/authenticate using UserService", () => {
     ).rejects.toThrow(DoesNotExistError);
   });
 
-  it("throws user and token response", async () => {
+  it("returns user and token response", async () => {
     jest
       .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
       .mockReturnValue({

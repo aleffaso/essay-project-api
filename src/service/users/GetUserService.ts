@@ -1,7 +1,6 @@
 import { AppDataSource } from "../../data-source";
 
 import { User as UserTable } from "../../entities/user/User";
-import { UserPermission } from "../../entities/user/UserPermission";
 import { DoesNotExistError, ForbiddenError } from "../../errors";
 import { getPermissions } from "../PermissionsUserService";
 import { UserType, UserIdType } from "./_types";

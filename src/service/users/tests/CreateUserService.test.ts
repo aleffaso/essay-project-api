@@ -80,7 +80,7 @@ describe("POST on /user using CreateUserService", () => {
     ).rejects.toThrow(AlreadyExistsError);
   });
 
-  it("throws user created successfully", async () => {
+  it("returns user created successfully", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
     const userRequest: UserCreateType = {

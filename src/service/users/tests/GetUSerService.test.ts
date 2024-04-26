@@ -50,7 +50,7 @@ describe("GET on /user using GetUserService", () => {
       deleteUserService.execute(authorization, userId)
     ).rejects.toThrow(DoesNotExistError);
   });
-  it("throws user deleted successfully", async () => {
+  it("returns user deleted successfully", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
     const userRequest: UserIdType = {

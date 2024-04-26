@@ -4,8 +4,7 @@ import { ServiceUnavailableError } from "../errors";
 export class HealthCheckService {
   async execute() {
     try {
-      const repo = AppDataSource.isInitialized;
-      if (!repo) {
+      if (!AppDataSource.isInitialized) {
         throw new ServiceUnavailableError("Service Unavailable");
       }
       return { message: "API online", status_code: 200 };
