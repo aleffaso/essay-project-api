@@ -69,6 +69,7 @@ export default new (class UserController {
         .json({ error: error, message: "Internal Server Error" });
     }
   }
+
   async update(req: Request, res: Response) {
     const authorization = req.headers.authorization;
     const { id } = req.params;
