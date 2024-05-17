@@ -16,9 +16,11 @@ import * as userAuthMiddleware from "../../middleware/userAuthMiddleware";
 import * as PermissionsUserService from "../../service/PermissionsUserService";
 import jwt from "jsonwebtoken";
 import { UserPermission } from "../../entities/user/UserPermission";
-import { UserResponseType, UserUpdateType } from "../../service/users/_types";
+import { UserResponseType } from "../../service/users/_types";
 import { UpdateUserService } from "../../service/users/UpdateUserService";
 import { GetUserService } from "../../service/users/GetUserService";
+import { ListUsersService } from "../../service/users/ListUsersService";
+import { DeleteUserService } from "../../service/users/DeleteUserService";
 
 jest.mock("../../service/users/AuthenticateUserService");
 
@@ -281,7 +283,7 @@ describe("UserController", () => {
     });
   });
 
-  describe("POST on /user route for updating user", () => {
+  describe("PUT on /user route for updating user", () => {
     const request = {
       headers: {
         authorization: "Bearer eyJhbGciOiJIUzI1Ni...",
@@ -516,18 +518,18 @@ describe("UserController", () => {
       },
     } as unknown as Request;
 
+    const permissions = [{ id: "2", type: "ADMIN" }];
+
+    const userResponse: UserResponseType = {
+      id: "ec71bc...",
+      firstName: "John",
+      lastName: "Smith",
+      email: "john@smith.com",
+      isActive: true,
+      permissions: permissions as unknown as UserPermission[],
+    };
+
     it("should return 'You do not have permission' and return status code 403", async () => {
-      const permissions = [{ id: "2", type: "ADMIN" }];
-
-      const userResponse: UserResponseType = {
-        id: "ec71bc...",
-        firstName: "John",
-        lastName: "Smith",
-        email: "john@smith.com",
-        isActive: true,
-        permissions: permissions as unknown as UserPermission[],
-      };
-
       jest.spyOn(jwt, "verify").mockReturnValue({
         id: "ec71bc...",
       } as any);
@@ -596,6 +598,295 @@ describe("UserController", () => {
       expect(mockResponse.status).toHaveBeenCalledWith(401);
       expect(mockResponse.json).toHaveBeenCalledWith({
         error: "User does not exist",
+      });
+    });
+
+    it("should return userRequest and return status code 200", async () => {
+      jest.spyOn(jwt, "verify").mockReturnValue({
+        id: "ec71bc...",
+      } as any);
+
+      jest
+        .spyOn(userAuthMiddleware, "default")
+        .mockImplementation((req, res, next) => {
+          next();
+          return Promise.resolve();
+        });
+
+      jest
+        .spyOn(PermissionsUserService, "getPermissions")
+        .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
+
+      jest
+        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .mockReturnValue({
+          findOne: jest.fn().mockResolvedValue(userResponse),
+        });
+
+      const getUserService = new GetUserService();
+
+      jest
+        .spyOn(getUserService, "execute")
+        .mockResolvedValue({ user: userResponse });
+
+      await UserController.get(request, mockResponse);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({ user: userResponse });
+    });
+  });
+
+  describe("GET on /users route for listing many users", () => {
+    const request = {
+      headers: {
+        authorization: "Bearer eyJhbGciOiJIUzI1Ni...",
+      },
+      query: {
+        page: 1,
+        limit: 1,
+      },
+    } as unknown as Request;
+
+    const permissions = [
+      { id: "2", type: "ADMIN" },
+    ] as unknown as UserPermission[];
+
+    const userResponse: UserResponseType = {
+      id: "ec71bc...",
+      firstName: "John",
+      lastName: "Smith",
+      email: "john@smith.com",
+      isActive: true,
+      permissions: permissions as unknown as UserPermission[],
+    };
+
+    it("should return 'You do not have permission' and return status code 403", async () => {
+      jest.spyOn(jwt, "verify").mockReturnValue({
+        id: "ec71bc...",
+      } as any);
+
+      jest
+        .spyOn(userAuthMiddleware, "default")
+        .mockImplementation((req, res, next) => {
+          next();
+          return Promise.resolve();
+        });
+
+      jest
+        .spyOn(PermissionsUserService, "getPermissions")
+        .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
+
+      jest
+        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .mockReturnValue({
+          find: jest.fn().mockResolvedValue(false),
+        });
+
+      const listUserService = new ListUsersService();
+
+      jest
+        .spyOn(listUserService, "execute")
+        .mockRejectedValue(new ForbiddenError("You do not have permission"));
+
+      await UserController.list(request, mockResponse);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(403);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        error: "You do not have permission",
+      });
+    });
+
+    it("should return 'Users does not exist' and return status code 401", async () => {
+      jest.spyOn(jwt, "verify").mockReturnValue({
+        id: "ec71bc...",
+      } as any);
+
+      jest
+        .spyOn(userAuthMiddleware, "default")
+        .mockImplementation((req, res, next) => {
+          next();
+          return Promise.resolve();
+        });
+
+      jest
+        .spyOn(PermissionsUserService, "getPermissions")
+        .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
+
+      jest
+        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .mockReturnValue({
+          find: jest.fn().mockReturnValue(false),
+        });
+
+      const listUserService = new ListUsersService();
+
+      jest
+        .spyOn(listUserService, "execute")
+        .mockRejectedValue(new DoesNotExistError("User does not exist"));
+
+      await UserController.list(request, mockResponse);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        error: "Users do not exist",
+      });
+    });
+
+    it("should return users list and return status code 200", async () => {
+      const usersResponses = [userResponse, userResponse];
+
+      jest.spyOn(jwt, "verify").mockReturnValue({
+        id: "ec71bc...",
+      } as any);
+
+      jest
+        .spyOn(userAuthMiddleware, "default")
+        .mockImplementation((req, res, next) => {
+          next();
+          return Promise.resolve();
+        });
+
+      jest
+        .spyOn(PermissionsUserService, "getPermissions")
+        .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
+
+      jest
+        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .mockReturnValue({
+          find: jest.fn().mockReturnValue(usersResponses),
+        });
+
+      const listUserService = new ListUsersService();
+
+      jest.spyOn(listUserService, "execute").mockResolvedValue({
+        count: usersResponses.length,
+        users: usersResponses,
+      });
+
+      await UserController.list(request, mockResponse);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        count: usersResponses.length,
+        users: usersResponses,
+      });
+    });
+  });
+
+  describe("DELETE on /user route for delete a single user", () => {
+    const request = {
+      headers: {
+        authorization: "Bearer eyJhbGciOiJIUzI1Ni...",
+      },
+      params: {
+        id: "ec71bc...",
+      },
+    } as unknown as Request;
+
+    it("should return 'You do not have permission' and return status code 403", async () => {
+      jest.spyOn(jwt, "verify").mockReturnValue({
+        id: "ec71bc...",
+      } as any);
+
+      jest
+        .spyOn(userAuthMiddleware, "default")
+        .mockImplementation((req, res, next) => {
+          next();
+          return Promise.resolve();
+        });
+
+      jest
+        .spyOn(PermissionsUserService, "getPermissions")
+        .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
+
+      jest
+        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .mockReturnValue({
+          findOne: jest.fn().mockResolvedValue(false),
+        });
+
+      const deleteUserService = new DeleteUserService();
+
+      jest
+        .spyOn(deleteUserService, "execute")
+        .mockRejectedValue(new ForbiddenError("You do not have permission"));
+
+      await UserController.delete(request, mockResponse);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(403);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        error: "You do not have permission",
+      });
+    });
+
+    it("should return 'Users does not exist' and return status code 401", async () => {
+      jest.spyOn(jwt, "verify").mockReturnValue({
+        id: "ec71bc...",
+      } as any);
+
+      jest
+        .spyOn(userAuthMiddleware, "default")
+        .mockImplementation((req, res, next) => {
+          next();
+          return Promise.resolve();
+        });
+
+      jest
+        .spyOn(PermissionsUserService, "getPermissions")
+        .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
+
+      jest
+        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .mockReturnValue({
+          findOne: jest.fn().mockReturnValue(false),
+        });
+
+      const deleteUserService = new DeleteUserService();
+
+      jest
+        .spyOn(deleteUserService, "execute")
+        .mockRejectedValue(new DoesNotExistError("User does not exist"));
+
+      await UserController.delete(request, mockResponse);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        error: "User does not exist",
+      });
+    });
+
+    it("should delete a user and return status code 200", async () => {
+      jest.spyOn(jwt, "verify").mockReturnValue({
+        id: "ec71bc...",
+      } as any);
+
+      jest
+        .spyOn(userAuthMiddleware, "default")
+        .mockImplementation((req, res, next) => {
+          next();
+          return Promise.resolve();
+        });
+
+      jest
+        .spyOn(PermissionsUserService, "getPermissions")
+        .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
+
+      jest
+        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .mockReturnValue({
+          findOne: jest.fn().mockReturnValue(true),
+          delete: jest.fn().mockReturnValue(request.params.id),
+        });
+
+      const deleteUserService = new DeleteUserService();
+
+      jest.spyOn(deleteUserService, "execute").mockReturnThis();
+
+      await UserController.delete(request, mockResponse);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: "Deleted successfully",
       });
     });
   });
