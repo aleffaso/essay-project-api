@@ -443,6 +443,67 @@ describe("UserController", () => {
         error: "Email already in use",
       });
     });
+
+    it("should return userRequest and return status code 200", async () => {
+      const permissionResponse = [
+        { id: "1", type: "ADMIN" },
+        { id: "2", type: "CUSTOMER" },
+      ] as unknown as UserPermission[];
+
+      const userResponse: UserResponseType = {
+        id: "ec71bc...",
+        firstName: "John",
+        lastName: "Smith",
+        email: "john@smith.com",
+        isActive: true,
+        permissions: permissionResponse as unknown as UserPermission[],
+      };
+
+      const userRequest = {
+        password: "password",
+      };
+
+      jest.spyOn(jwt, "verify").mockReturnValue({
+        id: "ec71bc...",
+      } as any);
+
+      jest
+        .spyOn(userAuthMiddleware, "default")
+        .mockImplementation((req, res, next) => {
+          next();
+          return Promise.resolve();
+        });
+
+      jest
+        .spyOn(PermissionsUserService, "getPermissions")
+        .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
+
+      jest
+        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .mockReturnValue({
+          findOne: jest.fn().mockImplementation(async (query) => {
+            if (query.where && query.where.email) {
+              return false;
+            }
+            return { ...userResponse, password: userRequest.password };
+          }),
+          find: jest.fn().mockResolvedValue(permissionResponse),
+          save: jest.fn().mockResolvedValue({ userRequest: userResponse }),
+        });
+
+      const observer = new EmailUpdateNotifier();
+
+      const updateUserService = new UpdateUserService(observer);
+
+      jest
+        .spyOn(updateUserService, "execute")
+        .mockResolvedValue({ user: userResponse });
+
+      await UserController.update(request, mockResponse);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({ user: userResponse });
+    });
   });
 
   describe("GET on /user route for getting a single user", () => {
