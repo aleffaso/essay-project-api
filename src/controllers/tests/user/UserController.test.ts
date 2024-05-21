@@ -137,17 +137,6 @@ describe("UserController", () => {
     } as Request;
 
     it("should return 'You do not have permission' and return status code 403", async () => {
-      const permissions = [{ id: "2", type: "ADMIN" }];
-
-      const userResponse: UserResponseType = {
-        id: "ec71bc...",
-        firstName: "John",
-        lastName: "Smith",
-        email: "john@smith.com",
-        isActive: true,
-        permissions: permissions as unknown as UserPermission[],
-      };
-
       jest.spyOn(jwt, "verify").mockReturnValue({
         id: "ec71bc...",
       } as any);
@@ -162,12 +151,6 @@ describe("UserController", () => {
       jest
         .spyOn(PermissionsUserService, "getPermissions")
         .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
-
-      jest
-        .spyOn(require("../../../data-source").AppDataSource, "getRepository")
-        .mockReturnValue({
-          findOne: jest.fn().mockResolvedValue(userResponse),
-        });
 
       const observer = new EmailCreationNotifier();
 
@@ -280,7 +263,7 @@ describe("UserController", () => {
 
       jest
         .spyOn(createUserService, "execute")
-        .mockRejectedValue(new AlreadyExistsError("User already exists"));
+        .mockResolvedValue({ user: userResponse });
 
       await UserController.create(request, mockResponse);
 

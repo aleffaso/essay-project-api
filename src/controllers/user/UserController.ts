@@ -132,7 +132,7 @@ export default new (class UserController {
   async list(req: Request, res: Response) {
     try {
       const authorization = req.headers.authorization;
-      const { page = 1, limit = 10 } = req.query;
+      const { page, limit } = req.query;
       const parsedPage = parseInt(page as string);
       const parsedLimit = parseInt(limit as string);
 

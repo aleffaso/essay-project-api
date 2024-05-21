@@ -23,7 +23,6 @@ export default new (class UserPermissionController {
       return res.status(200).json(userPermissionRequest);
     } catch (error) {
       if (
-        error instanceof DoesNotExistError ||
         error instanceof ForbiddenError ||
         error instanceof AlreadyExistsError
       ) {
@@ -37,7 +36,7 @@ export default new (class UserPermissionController {
   async list(req: Request, res: Response) {
     try {
       const authorization = req.headers.authorization;
-      const { page = 1, limit = 10 } = req.query;
+      const { page, limit } = req.query;
       const parsedPage = parseInt(page as string);
       const parsedLimit = parseInt(limit as string);
 
