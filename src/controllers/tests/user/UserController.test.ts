@@ -1,28 +1,28 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import UserController from "../user/UserController";
-import { AuthenticateUserService } from "../../service/users/AuthenticateUserService";
+import UserController from "../../user/UserController";
+import { AuthenticateUserService } from "../../../service/users/AuthenticateUserService";
 import {
   AlreadyExistsError,
   DoesNotExistError,
   ForbiddenError,
-} from "../../errors";
-import { CreateUserService } from "../../service/users/CreateUserService";
+} from "../../../errors";
+import { CreateUserService } from "../../../service/users/CreateUserService";
 import {
   EmailCreationNotifier,
   EmailUpdateNotifier,
-} from "../../service/users/observers/EmailNotifier";
-import * as userAuthMiddleware from "../../middleware/userAuthMiddleware";
-import * as PermissionsUserService from "../../service/PermissionsUserService";
+} from "../../../service/users/observers/EmailNotifier";
+import * as userAuthMiddleware from "../../../middleware/userAuthMiddleware";
+import * as PermissionsUserService from "../../../service/PermissionsUserService";
 import jwt from "jsonwebtoken";
-import { UserPermission } from "../../entities/user/UserPermission";
-import { UserResponseType } from "../../service/users/_types";
-import { UpdateUserService } from "../../service/users/UpdateUserService";
-import { GetUserService } from "../../service/users/GetUserService";
-import { ListUsersService } from "../../service/users/ListUsersService";
-import { DeleteUserService } from "../../service/users/DeleteUserService";
+import { UserPermission } from "../../../entities/user/UserPermission";
+import { UserResponseType } from "../../../service/users/_types";
+import { UpdateUserService } from "../../../service/users/UpdateUserService";
+import { GetUserService } from "../../../service/users/GetUserService";
+import { ListUsersService } from "../../../service/users/ListUsersService";
+import { DeleteUserService } from "../../../service/users/DeleteUserService";
 
-jest.mock("../../service/users/AuthenticateUserService");
+jest.mock("../../../service/users/AuthenticateUserService.ts");
 
 describe("UserController", () => {
   let mockResponse: Response;
@@ -164,7 +164,7 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(require("../../../data-source").AppDataSource, "getRepository")
         .mockReturnValue({
           findOne: jest.fn().mockResolvedValue(userResponse),
         });
@@ -202,7 +202,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockResolvedValue(true),
         });
@@ -253,7 +256,10 @@ describe("UserController", () => {
       jest.spyOn(bcrypt, "hashSync").mockReturnValue("hashedPassword");
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockResolvedValue(false),
           create: jest.fn().mockImplementation((user) => ({
@@ -329,7 +335,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockResolvedValue(userResponse),
         });
@@ -367,7 +376,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockReturnValue(false),
         });
@@ -420,7 +432,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockImplementation(async (query) => {
             if (query.where && userResponse.email === userRequest.email) {
@@ -481,7 +496,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockImplementation(async (query) => {
             if (query.where && query.where.email) {
@@ -546,7 +564,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockResolvedValue(userResponse),
         });
@@ -582,7 +603,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockReturnValue(false),
         });
@@ -618,7 +642,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockResolvedValue(userResponse),
         });
@@ -677,7 +704,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           find: jest.fn().mockResolvedValue(false),
         });
@@ -713,7 +743,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           find: jest.fn().mockReturnValue(false),
         });
@@ -751,7 +784,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           find: jest.fn().mockReturnValue(usersResponses),
         });
@@ -800,7 +836,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockResolvedValue(false),
         });
@@ -836,7 +875,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockReturnValue(false),
         });
@@ -872,7 +914,10 @@ describe("UserController", () => {
         .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
       jest
-        .spyOn(require("../../data-source.ts").AppDataSource, "getRepository")
+        .spyOn(
+          require("../../../data-source.ts").AppDataSource,
+          "getRepository"
+        )
         .mockReturnValue({
           findOne: jest.fn().mockReturnValue(true),
           delete: jest.fn().mockReturnValue(request.params.id),
