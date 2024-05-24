@@ -7,9 +7,11 @@ import {
   PrimaryGeneratedColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
 } from "typeorm";
 import { v4 as uuid } from "uuid";
 import { UserPermission } from "./UserPermission";
+import { Essay } from "../essay/Essay";
 
 @Entity("users")
 export class User {
@@ -40,6 +42,9 @@ export class User {
   @ManyToMany(() => UserPermission, { nullable: true })
   @JoinTable()
   permissions: UserPermission[];
+
+  @OneToMany(() => Essay, (essay) => essay.author) // Each User can have many Essays
+  essays: Essay[];
 
   constructor(
     firstName: string,
