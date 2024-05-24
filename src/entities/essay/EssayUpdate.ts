@@ -15,13 +15,13 @@ export class EssayUpdate {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true, type: "text" })
   annotations: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true, type: "text" })
   corrections: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ nullable: true, type: "text" })
   comments: string;
 
   @CreateDateColumn()

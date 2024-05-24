@@ -26,13 +26,13 @@ export class Essay {
   })
   testType: TestType;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: "varchar" })
   title: string;
 
-  @Column({ type: "text", nullable: false })
+  @Column({ nullable: false, type: "text" })
   text: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "varchar" })
   essayUploadedLink: string;
 
   @Column({
