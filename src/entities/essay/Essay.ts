@@ -1,83 +1,77 @@
-// import {
-//   Entity,
-//   Column,
-//   CreateDateColumn,
-//   UpdateDateColumn,
-//   PrimaryGeneratedColumn,
-//   ManyToOne,
-//   OneToMany,
-//   BeforeInsert,
-// } from "typeorm";
-// import { v4 as uuid } from "uuid";
-// import { User } from "../user/User";
-// import { EssayUpdate } from "../essay/EssayUpdate";
-// import { StatusType } from "../essay/Enum";
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
+import { v4 as uuid } from "uuid";
+import { User } from "../user/User";
+import { EssayUpdate } from "./EssayUpdate";
+import { EssayTag } from "./EssayTag";
+import { StatusType, TestType } from "./Enum";
 
-// @Entity("essays")
-// export class Essay {
-//   @PrimaryGeneratedColumn("uuid")
-//   readonly id: string;
+@Entity("essays")
+export class Essay {
+  @PrimaryGeneratedColumn("uuid")
+  readonly id: string;
 
-//   @Column({ nullable: false })
-//   title: string;
+  @Column({
+    type: "enum",
+    enum: TestType,
+    nullable: false,
+    default: TestType.OTHER,
+  })
+  testType: TestType;
 
-//   @Column({ type: "text", nullable: false })
-//   text: string;
+  @Column({ nullable: false })
+  title: string;
 
-//   @Column({ nullable: true })
-//   essayUploadedLink: string;
+  @Column({ type: "text", nullable: false })
+  text: string;
 
-//   @Column({ nullable: false, default: "PENDING" })
-//   status: string;
+  @Column({ nullable: true })
+  essayUploadedLink: string;
 
-//   @Column({ nullable: true })
-//   tags: string;
+  @Column({
+    type: "enum",
+    enum: StatusType,
+    nullable: false,
+    default: StatusType.PENDING,
+  })
+  status: StatusType;
 
-//   @CreateDateColumn()
-//   created_at: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-//   @UpdateDateColumn()
-//   updated_at: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
-//   @ManyToOne(() => User, (user) => user.essays) // Each Essay belongs to one User
-//   author: User;
+  @ManyToOne(() => User, (user) => user.essays, { nullable: false }) // Each Essay belongs to one User
+  author: User;
 
-//   @OneToMany(() => EssayUpdate, (essayUpdate) => essayUpdate.essay) // Each Essay has many essay updates
-//   updates: EssayUpdate[];
+  @OneToMany(() => EssayUpdate, (essayUpdate) => essayUpdate.essay) // Each Essay has many essay updates
+  updates: EssayUpdate[];
 
-//   constructor(
-//     title: string,
-//     text: string,
-//     essayUploadedLink: string,
-//     status: string,
-//     tags: string,
-//     author: User,
-//     updates: EssayUpdate[]
-//   ) {
-//     this.title = title;
-//     this.text = text;
-//     this.essayUploadedLink = essayUploadedLink;
-//     this.status = status;
-//     this.tags = tags;
-//     this.author = author;
-//     this.updates = updates;
-//     if (!this.id) {
-//       this.id = uuid();
-//     }
-//   }
+  @OneToMany(() => EssayTag, (essayTag) => essayTag.essay) // Each Essay can have many tags
+  tags: EssayTag[];
 
-//   @BeforeInsert()
-//   validateStatus() {
-//     if (!this.status) {
-//       throw new Error("Essay must have a status.");
-//     }
-
-//     const validStatus: string[] = Object.values(StatusType).map(
-//       (status) => status
-//     );
-
-//     if (!validStatus.includes(this.status)) {
-//       throw new Error("Invalid status type.");
-//     }
-//   }
-// }
+  constructor(
+    title: string,
+    text: string,
+    essayUploadedLink: string,
+    status: StatusType,
+    author: User
+  ) {
+    this.title = title;
+    this.text = text;
+    this.essayUploadedLink = essayUploadedLink;
+    this.status = status;
+    this.author = author;
+    if (!this.id) {
+      this.id = uuid();
+    }
+  }
+}
