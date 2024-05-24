@@ -11,7 +11,7 @@
     "createUserPermissions": "npx ts-node src/config/index.ts CreateUserPermissions",
     "createSuperUser": "npx ts-node src/config/index.ts CreateSuperUser",
     "test": "jest",
-    "test:coverage": "npm test --coverage",
+    "test:coverage": "npm run test --coverage",
     "test:badges": "npm run test:coverage  && jest-coverage-badges"
   },
   "jest": {
