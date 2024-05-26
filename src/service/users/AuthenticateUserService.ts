@@ -5,10 +5,10 @@ import { AppDataSource } from "../../data-source";
 import { User as UserTable } from "../../entities/user/User";
 import { KEYS } from "../../constants";
 import { DoesNotExistError } from "../../errors";
-import { UserRequestType, UserType } from "./_types";
+import { UserAuthenticationRequestType } from "./_types";
 
 class AuthenticateUserService {
-  async execute({ email, password }: UserRequestType) {
+  async execute({ email, password }: UserAuthenticationRequestType) {
     try {
       const userRepo = AppDataSource.getRepository(UserTable);
       const user = await userRepo.findOne({

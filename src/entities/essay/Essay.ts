@@ -11,7 +11,7 @@ import { v4 as uuid } from "uuid";
 import { User } from "../user/User";
 import { EssayUpdate } from "./EssayUpdate";
 import { EssayTag } from "./EssayTag";
-import { StatusType, TestType } from "./Enum";
+import { StatusType, SpecificationType } from "./Enum";
 
 @Entity("essays")
 export class Essay {
@@ -20,11 +20,11 @@ export class Essay {
 
   @Column({
     type: "enum",
-    enum: TestType,
+    enum: SpecificationType,
     nullable: false,
-    default: TestType.OTHER,
+    default: SpecificationType.OTHER,
   })
-  testType: TestType;
+  specification: SpecificationType;
 
   @Column({ nullable: false, type: "varchar" })
   title: string;
@@ -33,7 +33,7 @@ export class Essay {
   text: string;
 
   @Column({ nullable: true, type: "varchar" })
-  essayUploadedLink: string;
+  uploadedLink: string;
 
   @Column({
     type: "enum",
@@ -44,10 +44,10 @@ export class Essay {
   status: StatusType;
 
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.essays, { nullable: false }) // Each Essay belongs to one User
   author: User;
@@ -59,17 +59,23 @@ export class Essay {
   tags: EssayTag[];
 
   constructor(
+    specification: SpecificationType,
     title: string,
     text: string,
-    essayUploadedLink: string,
+    uploadedLink: string,
     status: StatusType,
-    author: User
+    author: User,
+    updates: EssayUpdate[],
+    tags: EssayTag[]
   ) {
+    this.specification = specification;
     this.title = title;
     this.text = text;
-    this.essayUploadedLink = essayUploadedLink;
+    this.uploadedLink = uploadedLink;
     this.status = status;
     this.author = author;
+    this.updates = updates;
+    this.tags = tags;
     if (!this.id) {
       this.id = uuid();
     }

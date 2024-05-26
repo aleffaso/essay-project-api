@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import { Essay } from "./Essay";
 import { Tag } from "./Tag";
 
-@Entity("essay_tags")
+@Entity("essay-tags")
 export class EssayTag {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;

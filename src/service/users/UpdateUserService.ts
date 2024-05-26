@@ -8,7 +8,7 @@ import {
   ForbiddenError,
 } from "../../errors";
 import { UserUpdatedObserver } from "./observers/EmailNotifier";
-import { UserUpdateType } from "./_types";
+import { UserUpdateType, UserIdType } from "./_types";
 import { In } from "typeorm";
 import { UserPermission } from "../../entities/user/UserPermission";
 import { getPermissions } from "../PermissionsUserService";
@@ -30,7 +30,7 @@ export class UpdateUserService {
       isActive,
       password,
       permissions,
-    }: UserUpdateType
+    }: UserUpdateType & UserIdType
   ) {
     try {
       const permissionsResult = await getPermissions(
@@ -82,7 +82,7 @@ export class UpdateUserService {
 
       await userRepo.save(user);
 
-      const userResponse: UserUpdateType = {
+      const userResponse: UserUpdateType & UserIdType = {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,

@@ -52,7 +52,8 @@ export class User {
     email: string,
     password: string,
     isActive: boolean,
-    permissions: UserPermission[]
+    permissions: UserPermission[],
+    essays: Essay[]
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
@@ -60,6 +61,7 @@ export class User {
     this.password = password;
     this.isActive = isActive;
     this.permissions = permissions;
+    this.essays = essays;
     if (!this.id) {
       this.id = uuid();
     }

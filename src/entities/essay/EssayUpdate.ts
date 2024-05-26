@@ -10,7 +10,7 @@ import { v4 as uuid } from "uuid";
 import { User } from "../user/User";
 import { Essay } from "./Essay";
 
-@Entity("essay_updates")
+@Entity("essay-updates")
 export class EssayUpdate {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
@@ -25,10 +25,10 @@ export class EssayUpdate {
   comments: string;
 
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 
   @ManyToOne(() => User, { nullable: false }) // Each update is made by one User
   user: User;
