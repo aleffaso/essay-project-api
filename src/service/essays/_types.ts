@@ -4,6 +4,7 @@ import { EssayTag } from "../../entities/essay/EssayTag";
 import { EssayUpdate } from "../../entities/essay/EssayUpdate";
 import { Tag } from "../../entities/essay/Tag";
 import { User } from "../../entities/user/User";
+import { UserType } from "../users/_types";
 
 export type EssayType = {
   id: string;
@@ -12,7 +13,7 @@ export type EssayType = {
   text: string;
   uploadedLink: string;
   status: StatusType;
-  author: User;
+  author: UserType;
   updates: EssayUpdate[];
   tags: EssayTag[];
 };
@@ -68,6 +69,4 @@ export type EssayUpdatesUpdateType = EssayUpdatesCreateType;
 
 export type EssayUpdatesIdType = Pick<EssayUpdatesType, "id">;
 
-export type FindUserPermission = {
-  permissions: { type: string }[];
-};
+export type EssayResponseType = EssayType;

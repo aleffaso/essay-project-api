@@ -3,7 +3,7 @@ import { AlreadyExistsError, ForbiddenError } from "../../../errors";
 import { CreateUserService } from "../CreateUserService";
 import * as PermissionsUserService from "../../PermissionsUserService";
 import { UserCreateType, UserResponseType } from "../_types";
-import { EmailCreationNotifier } from "../observers/EmailNotifier";
+import { EmailUserCreationNotifier } from "../observers/EmailNotifier";
 import { UserPermission } from "../../../entities/user/UserPermission";
 
 beforeEach(() => {
@@ -27,7 +27,7 @@ describe("POST on /user using CreateUserService", () => {
       .spyOn(PermissionsUserService, "getPermissions")
       .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
-    const observer = new EmailCreationNotifier();
+    const observer = new EmailUserCreationNotifier();
 
     const createUserService = new CreateUserService(observer);
 
@@ -71,7 +71,7 @@ describe("POST on /user using CreateUserService", () => {
         findOne: jest.fn().mockResolvedValue(userResponse),
       });
 
-    const observer = new EmailCreationNotifier();
+    const observer = new EmailUserCreationNotifier();
 
     const createUserService = new CreateUserService(observer);
 
@@ -134,7 +134,7 @@ describe("POST on /user using CreateUserService", () => {
         save: mockSave,
       });
 
-    const observer = new EmailCreationNotifier();
+    const observer = new EmailUserCreationNotifier();
 
     const createUserService = new CreateUserService(observer);
 

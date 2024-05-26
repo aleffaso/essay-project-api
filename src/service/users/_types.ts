@@ -1,3 +1,4 @@
+import { Essay } from "../../entities/essay/Essay";
 import { UserPermission } from "../../entities/user/UserPermission";
 
 export type UserType = {
@@ -7,13 +8,14 @@ export type UserType = {
   email: string;
   isActive?: boolean;
   permissions: UserPermission[];
+  essays?: Essay[];
 };
 
 export type UserCreateType = Omit<UserType, "id"> & {
   password: string;
 };
 
-export type UserUpdateType = Omit<UserType, "id"> & {
+export type UserUpdateType = Partial<Omit<UserType, "id">> & {
   password?: string;
   permissions?: UserPermission[];
 };

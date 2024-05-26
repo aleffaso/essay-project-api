@@ -10,8 +10,8 @@ import * as PermissionsUserService from "../../PermissionsUserService";
 import { UpdateUserService } from "../UpdateUserService";
 import { UserUpdateType, UserIdType } from "../_types";
 import {
-  EmailCreationNotifier,
-  EmailUpdateNotifier,
+  EmailUserCreationNotifier,
+  EmailUserUpdateNotifier,
 } from "../observers/EmailNotifier";
 
 beforeEach(() => {
@@ -36,7 +36,7 @@ describe("PUT on /user using UpdateUserService", () => {
       .spyOn(PermissionsUserService, "getPermissions")
       .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
-    const observer = new EmailCreationNotifier();
+    const observer = new EmailUserCreationNotifier();
 
     const createUserService = new UpdateUserService(observer);
 
@@ -68,7 +68,7 @@ describe("PUT on /user using UpdateUserService", () => {
         findOne: jest.fn().mockReturnValue(false),
       });
 
-    const observer = new EmailCreationNotifier();
+    const observer = new EmailUserCreationNotifier();
 
     const updateUserService = new UpdateUserService(observer);
 
@@ -121,7 +121,7 @@ describe("PUT on /user using UpdateUserService", () => {
         }),
       });
 
-    const observer = new EmailCreationNotifier();
+    const observer = new EmailUserCreationNotifier();
 
     const updateUserService = new UpdateUserService(observer);
 
@@ -179,7 +179,7 @@ describe("PUT on /user using UpdateUserService", () => {
     jest.spyOn(bcrypt, "compare").mockReturnValue(false as any);
     jest.spyOn(bcrypt, "hashSync").mockReturnValue("hashedPassword");
 
-    const observer = new EmailUpdateNotifier();
+    const observer = new EmailUserUpdateNotifier();
 
     const updateUserService = new UpdateUserService(observer);
 
@@ -236,7 +236,7 @@ describe("PUT on /user using UpdateUserService", () => {
 
     jest.spyOn(bcrypt, "compare").mockReturnValue(true as any);
 
-    const observer = new EmailUpdateNotifier();
+    const observer = new EmailUserUpdateNotifier();
 
     const updateUserService = new UpdateUserService(observer);
 
