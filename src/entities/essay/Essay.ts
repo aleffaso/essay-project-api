@@ -11,7 +11,7 @@ import { v4 as uuid } from "uuid";
 import { User } from "../user/User";
 import { EssayUpdate } from "./EssayUpdate";
 import { EssayTag } from "./EssayTag";
-import { StatusType, SpecificationType } from "./Enum";
+import { SpecificationType, StatusType } from "./Enum";
 
 @Entity("essays")
 export class Essay {
@@ -63,7 +63,6 @@ export class Essay {
     title: string,
     text: string,
     uploadedLink: string,
-    status: StatusType,
     author: User,
     updates: EssayUpdate[],
     tags: EssayTag[]
@@ -72,7 +71,6 @@ export class Essay {
     this.title = title;
     this.text = text;
     this.uploadedLink = uploadedLink;
-    this.status = status;
     this.author = author;
     this.updates = updates;
     this.tags = tags;

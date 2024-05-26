@@ -18,3 +18,10 @@ export function verifyRequiredPermissions(
 
   return false;
 }
+
+export function isValidEnumValue<T extends { [key: string]: any }>(
+  enumObj: T,
+  value: any
+): value is T[keyof T] {
+  return Object.values(enumObj).includes(value);
+}

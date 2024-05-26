@@ -1,6 +1,8 @@
+import { SpecificationType, StatusType } from "../../../entities/essay/Enum";
 import { UserPermission } from "../../../entities/user/UserPermission";
 import { DoesNotExistError, ForbiddenError } from "../../../errors";
 import * as PermissionsUserService from "../../PermissionsUserService";
+import { EssayType } from "../../essays/_types";
 import { GetUserService } from "../GetUserService";
 import { UserIdType, UserResponseType } from "../_types";
 
@@ -20,11 +22,11 @@ describe("GET on /user using GetUserService", () => {
       .spyOn(PermissionsUserService, "getPermissions")
       .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
-    const deleteUserService = new GetUserService();
+    const getUserService = new GetUserService();
 
-    await expect(
-      deleteUserService.execute(authorization, userId)
-    ).rejects.toThrow(ForbiddenError);
+    await expect(getUserService.execute(authorization, userId)).rejects.toThrow(
+      ForbiddenError
+    );
   });
 
   it("throws error: User does not exist", async () => {
@@ -44,13 +46,13 @@ describe("GET on /user using GetUserService", () => {
         findOne: jest.fn().mockResolvedValue(false),
       });
 
-    const deleteUserService = new GetUserService();
+    const getUserService = new GetUserService();
 
-    await expect(
-      deleteUserService.execute(authorization, userId)
-    ).rejects.toThrow(DoesNotExistError);
+    await expect(getUserService.execute(authorization, userId)).rejects.toThrow(
+      DoesNotExistError
+    );
   });
-  it("returns user deleted successfully", async () => {
+  it("returns user response", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
     const userRequest: UserIdType = {
@@ -79,12 +81,11 @@ describe("GET on /user using GetUserService", () => {
       .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
       .mockReturnValue({
         findOne: jest.fn().mockResolvedValue(userResponse),
-        delete: jest.fn().mockResolvedValue({ userRequest }),
       });
 
-    const deleteUserService = new GetUserService();
+    const getUserService = new GetUserService();
 
-    const request = await deleteUserService.execute(authorization, userRequest);
+    const request = await getUserService.execute(authorization, userRequest);
 
     expect(request).toEqual({ user: userResponse });
   });

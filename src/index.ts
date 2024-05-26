@@ -8,6 +8,7 @@ import cors from "cors";
 import healthCheck from "./routes/healthCheck";
 import userRouter from "./routes/user/user";
 import userPermissionRouter from "./routes/user/permission";
+import essayRouter from "./routes/user/essay";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(healthCheck);
 app.use(userPermissionRouter);
 app.use(userRouter);
+app.use(essayRouter);
 
 app.listen(KEYS.PORT, () =>
   console.log(`server started at https://localhost:${KEYS.PORT}`)

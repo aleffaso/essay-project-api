@@ -31,7 +31,7 @@ export class ListUsersService {
         ],
         skip: offset,
         take: limit,
-        relations: ["permissions"],
+        relations: ["permissions", "essays"],
       });
 
       if (!users || users.length === 0) {
@@ -45,6 +45,7 @@ export class ListUsersService {
         email: user.email,
         isActive: user.isActive,
         permissions: user.permissions,
+        essays: user.essays,
       }));
 
       return { count: userResponses.length, users: userResponses };

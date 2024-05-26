@@ -9,8 +9,8 @@ import {
 } from "../../../errors";
 import { CreateUserService } from "../../../service/users/CreateUserService";
 import {
-  EmailCreationNotifier,
-  EmailUpdateNotifier,
+  EmailUserCreationNotifier,
+  EmailUserUpdateNotifier,
 } from "../../../service/users/observers/EmailNotifier";
 import * as userAuthMiddleware from "../../../middleware/userAuthMiddleware";
 import * as PermissionsUserService from "../../../service/PermissionsUserService";
@@ -152,7 +152,7 @@ describe("UserController", () => {
         .spyOn(PermissionsUserService, "getPermissions")
         .mockResolvedValueOnce({ hasPermissions: false, permissions: [] });
 
-      const observer = new EmailCreationNotifier();
+      const observer = new EmailUserCreationNotifier();
 
       const createUserService = new CreateUserService(observer);
 
@@ -193,7 +193,7 @@ describe("UserController", () => {
           findOne: jest.fn().mockResolvedValue(true),
         });
 
-      const observer = new EmailCreationNotifier();
+      const observer = new EmailUserCreationNotifier();
 
       const createUserService = new CreateUserService(observer);
 
@@ -257,7 +257,7 @@ describe("UserController", () => {
           })),
         });
 
-      const observer = new EmailCreationNotifier();
+      const observer = new EmailUserCreationNotifier();
 
       const createUserService = new CreateUserService(observer);
 
@@ -326,7 +326,7 @@ describe("UserController", () => {
           findOne: jest.fn().mockResolvedValue(userResponse),
         });
 
-      const observer = new EmailUpdateNotifier();
+      const observer = new EmailUserUpdateNotifier();
 
       const updateUserService = new UpdateUserService(observer);
 
@@ -367,7 +367,7 @@ describe("UserController", () => {
           findOne: jest.fn().mockReturnValue(false),
         });
 
-      const observer = new EmailUpdateNotifier();
+      const observer = new EmailUserUpdateNotifier();
 
       const updateUserService = new UpdateUserService(observer);
 
@@ -428,7 +428,7 @@ describe("UserController", () => {
           }),
         });
 
-      const observer = new EmailUpdateNotifier();
+      const observer = new EmailUserUpdateNotifier();
 
       const updateUserService = new UpdateUserService(observer);
 
@@ -494,7 +494,7 @@ describe("UserController", () => {
           save: jest.fn().mockResolvedValue({ userRequest: userResponse }),
         });
 
-      const observer = new EmailUpdateNotifier();
+      const observer = new EmailUserUpdateNotifier();
 
       const updateUserService = new UpdateUserService(observer);
 

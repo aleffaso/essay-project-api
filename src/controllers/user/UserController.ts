@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { CreateUserService } from "../../service/users/CreateUserService";
 import {
-  EmailCreationNotifier,
-  EmailUpdateNotifier,
+  EmailUserCreationNotifier,
+  EmailUserUpdateNotifier,
 } from "../../service/users/observers/EmailNotifier";
 import { UpdateUserService } from "../../service/users/UpdateUserService";
 import { ListUsersService } from "../../service/users/ListUsersService";
@@ -44,7 +44,7 @@ export default new (class UserController {
       req.body;
     try {
       const createUserService = new CreateUserService(
-        new EmailCreationNotifier()
+        new EmailUserCreationNotifier()
       );
       const userRequest = await createUserService.execute(authorization, {
         firstName,
@@ -77,7 +77,7 @@ export default new (class UserController {
       req.body;
     try {
       const updateUserService = new UpdateUserService(
-        new EmailUpdateNotifier()
+        new EmailUserUpdateNotifier()
       );
 
       const userRequest = await updateUserService.execute(authorization, {
