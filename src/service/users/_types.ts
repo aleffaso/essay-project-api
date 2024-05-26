@@ -13,20 +13,18 @@ export type UserCreateType = Omit<UserType, "id"> & {
   password: string;
 };
 
-export type UserUpdateType = Partial<UserType> & {
+export type UserUpdateType = Omit<UserType, "id"> & {
   password?: string;
   permissions?: UserPermission[];
 };
 
-export type UserRequestType = {
-  email: string;
-  password: string;
-};
-
 export type UserResponseType = Omit<UserType, "password">;
 
-export type UserIdType = {
-  id: string;
+export type UserIdType = Pick<UserType, "id">;
+
+export type UserAuthenticationRequestType = {
+  email: string;
+  password: string;
 };
 
 export type FindUserPermission = {

@@ -8,7 +8,7 @@ import {
 } from "../../../errors";
 import * as PermissionsUserService from "../../PermissionsUserService";
 import { UpdateUserService } from "../UpdateUserService";
-import { UserUpdateType } from "../_types";
+import { UserUpdateType, UserIdType } from "../_types";
 import {
   EmailCreationNotifier,
   EmailUpdateNotifier,
@@ -22,7 +22,7 @@ describe("PUT on /user using UpdateUserService", () => {
   it("throws error: You do not have permission", async () => {
     const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....";
 
-    const userRequest: UserUpdateType = {
+    const userRequest: UserUpdateType & UserIdType = {
       id: "ec71bc...",
       firstName: "John",
       lastName: "Smith",
@@ -136,6 +136,7 @@ describe("PUT on /user using UpdateUserService", () => {
     const userId = { id: "ec71bc..." };
 
     const userRequest = {
+      id: "ec71bc...",
       firstName: "John",
       lastName: "Smith",
       email: "john@smith.com",
@@ -193,6 +194,7 @@ describe("PUT on /user using UpdateUserService", () => {
     const userId = { id: "ec71bc..." };
 
     const userRequest = {
+      id: "ec71bc...",
       firstName: "John",
       lastName: "Smith",
       email: "john@smith.com",

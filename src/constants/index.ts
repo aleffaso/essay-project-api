@@ -30,10 +30,10 @@ export const KEYS = {
 };
 
 export const PERMISSION_LEVELS = {
-  ADMIN: (process.env.ADMIN as string) ?? undefined,
-  USER: (process.env.USER as string) ?? undefined,
-  CUSTOMER: (process.env.CUSTOMER as string) ?? undefined,
-  FINANCIAL: (process.env.FINANCIAL as string) ?? undefined,
-  SUPPORT: (process.env.SUPPORT as string) ?? undefined,
-  DEVELOPER: (process.env.DEVELOPER as string) ?? undefined,
+  ADMIN: (process.env.ADMIN as string) ?? "ADMIN",
+  USER: (process.env.USER as string) ?? "USER",
+  CUSTOMER: (process.env.CUSTOMER as string) ?? "CUSTOMER",
+  FINANCIAL: (process.env.FINANCIAL as string) ?? "FINANCIAL",
+  SUPPORT: (process.env.SUPPORT as string) ?? "SUPPORT",
+  DEVELOPER: (process.env.DEVELOPER as string) ?? "DEVELOPER",
 };

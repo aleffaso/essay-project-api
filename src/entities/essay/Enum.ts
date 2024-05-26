@@ -26,7 +26,7 @@ export enum TagType {
   PHILOSOPHY = "PHILOSOPHY",
 }
 
-export enum TestType {
+export enum SpecificationType {
   ENEM = "ENEM",
   VESTIBULAR = "VESTIBULAR",
   CONCURSO = "CONCURSO",
