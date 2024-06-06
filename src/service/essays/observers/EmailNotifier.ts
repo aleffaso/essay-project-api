@@ -13,7 +13,7 @@ export class EmailEssayCreationNotifier implements EssayCreatedObserver {
   notify(essay: Essay): void {
     //TODO: implement email notification -> Send to user who will correct this
     console.log(
-      `New essay upload ${essay.uploadedLink} status: ${essay.status} author: ${essay.author.email}`
+      `New essay uploaded ${essay.uploadedLink} status: ${essay.status} author: ${essay.author.email}`
     );
   }
 }
