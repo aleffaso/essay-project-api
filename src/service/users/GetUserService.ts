@@ -20,7 +20,7 @@ export class GetUserService {
       const userRepo = AppDataSource.getRepository(UserTable);
       const user = await userRepo.findOne({
         where: { id },
-        relations: ["permissions"],
+        relations: ["permissions", "essays"],
       });
 
       if (!user) {
@@ -34,6 +34,7 @@ export class GetUserService {
         email: user.email,
         isActive: user.isActive,
         permissions: user.permissions,
+        essays: user.essays,
       };
 
       return { user: userResponse };
