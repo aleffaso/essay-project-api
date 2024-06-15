@@ -8,7 +8,7 @@ import cors from "cors";
 import healthCheck from "./routes/healthCheck";
 import userRouter from "./routes/user/user";
 import userPermissionRouter from "./routes/user/permission";
-import essayRouter from "./routes/user/essay";
+import essayRouter from "./routes/essay/essay";
 
 const app = express();
 

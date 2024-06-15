@@ -15,6 +15,9 @@ export class EssayUpdate {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
+  @Column({ nullable: true, type: "float" })
+  grade: number;
+
   @Column({ nullable: true, type: "text" })
   annotations: string;
 
@@ -33,7 +36,10 @@ export class EssayUpdate {
   @ManyToOne(() => User, { nullable: false }) // Each update is made by one User
   user: User;
 
-  @ManyToOne(() => Essay, (essay) => essay.updates, { nullable: false }) // Each update belongs to one Essay
+  @ManyToOne(() => Essay, (essay) => essay.updates, {
+    nullable: false,
+    onDelete: "CASCADE",
+  }) // Each update belongs to one Essay
   essay: Essay;
 
   constructor(

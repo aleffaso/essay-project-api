@@ -1,5 +1,5 @@
-import { DoesNotExistError, ForbiddenError } from "../../../errors";
-import * as PermissionsUserService from "../../PermissionsUserService";
+import { DoesNotExistError, ForbiddenError } from "../../../../errors";
+import * as PermissionsUserService from "../../../PermissionsUserService";
 import { ListUserPermissionsService } from "../ListUserPermissionsService";
 import { UserPermissionType } from "../_types";
 

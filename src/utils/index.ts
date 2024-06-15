@@ -25,3 +25,11 @@ export function isValidEnumValue<T extends { [key: string]: any }>(
 ): value is T[keyof T] {
   return Object.values(enumObj).includes(value);
 }
+
+export function isValidEnumArray<T extends { [key: string]: any }>(
+  enumObj: T,
+  values: any[]
+): values is T[keyof T][] {
+  if (!Array.isArray(values)) return false;
+  return values.every((value) => isValidEnumValue(enumObj, value));
+}

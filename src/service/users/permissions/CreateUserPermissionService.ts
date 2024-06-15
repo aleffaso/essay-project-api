@@ -1,7 +1,7 @@
-import { AppDataSource } from "../../data-source";
-import { UserPermission as UserPermissionTable } from "../../entities/user/UserPermission";
-import { AlreadyExistsError, ForbiddenError } from "../../errors";
-import { getPermissions } from "../PermissionsUserService";
+import { AppDataSource } from "../../../data-source";
+import { UserPermission as UserPermissionTable } from "../../../entities/user/UserPermission";
+import { AlreadyExistsError, ForbiddenError } from "../../../errors";
+import { getPermissions } from "../../PermissionsUserService";
 import { UserPermissionCreateType, UserPermissionType } from "./_types";
 
 export class CreateUserPermissionService {

@@ -1,6 +1,6 @@
-import * as PermissionsUserService from "../../PermissionsUserService";
+import * as PermissionsUserService from "../../../PermissionsUserService";
 import { CreateUserPermissionService } from "../CreateUserPermissionService";
-import { AlreadyExistsError, ForbiddenError } from "../../../errors";
+import { AlreadyExistsError, ForbiddenError } from "../../../../errors";
 import { UserPermissionType } from "../_types";
 
 beforeEach(() => {

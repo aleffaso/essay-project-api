@@ -1,13 +1,23 @@
-import { SpecificationType, StatusType } from "../../entities/essay/Enum";
-import { Essay } from "../../entities/essay/Essay";
-import { EssayTag } from "../../entities/essay/EssayTag";
-import { EssayUpdate } from "../../entities/essay/EssayUpdate";
-import { Tag } from "../../entities/essay/Tag";
-import { User } from "../../entities/user/User";
+import {
+  SpecificationType,
+  StatusType,
+  TagType,
+} from "../../entities/essay/Enum";
 import { UserType } from "../users/_types";
+
+export type EssayUpdate = {
+  id: string;
+  grade: number | undefined;
+  annotations: string;
+  corrections: string;
+  comments: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export type EssayType = {
   id: string;
+  tag: TagType;
   specification: SpecificationType;
   title: string;
   text: string;
@@ -15,58 +25,12 @@ export type EssayType = {
   status: StatusType;
   author: UserType;
   updates: EssayUpdate[];
-  tags: EssayTag[];
 };
 
 export type EssayCreateType = Partial<Omit<EssayType, "id">> & {
   updates?: EssayUpdate[];
-  tags?: EssayTag[];
 };
 
-export type EssayUpdateType = Partial<Omit<EssayType, "id">> & {
-  updates: EssayUpdate[];
-  tags: EssayTag[];
-};
+export type EssayUpdateType = EssayCreateType;
 
 export type EssayIdType = Pick<EssayType, "id">;
-
-export type EssayTagType = {
-  id: string;
-  essay: Essay;
-  tag: Tag;
-};
-
-export type EssayTagCreateType = Partial<Omit<EssayTagType, "id">> & {
-  essay: Essay;
-  tag: Tag;
-};
-
-export type EssayTagUpdateType = Partial<Omit<EssayTagType, "id">> & {
-  essay?: Essay;
-  tag?: Tag;
-};
-
-export type EssayTagIdType = Pick<EssayTagType, "id">;
-
-export type EssayUpdatesType = {
-  id: string;
-  annotations: string;
-  corrections: string;
-  comments: string;
-  user: User;
-  essay: Essay;
-};
-
-export type EssayUpdatesCreateType = Partial<Omit<EssayUpdatesType, "id">> & {
-  annotations?: string;
-  corrections?: string;
-  comments?: string;
-  user: User;
-  essay: Essay;
-};
-
-export type EssayUpdatesUpdateType = EssayUpdatesCreateType;
-
-export type EssayUpdatesIdType = Pick<EssayUpdatesType, "id">;
-
-export type EssayResponseType = EssayType;
