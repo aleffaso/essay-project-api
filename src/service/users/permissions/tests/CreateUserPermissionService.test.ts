@@ -37,7 +37,10 @@ describe("POST on /permission using PermissionService", () => {
       .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
     jest
-      .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
+      .spyOn(
+        require("../../../../data-source.ts").AppDataSource,
+        "getRepository"
+      )
       .mockReturnValue({
         findOne: jest.fn().mockResolvedValue(permissionRequest),
       });
@@ -55,7 +58,10 @@ describe("POST on /permission using PermissionService", () => {
       .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
     jest
-      .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
+      .spyOn(
+        require("../../../../data-source.ts").AppDataSource,
+        "getRepository"
+      )
       .mockReturnValue({
         findOne: jest.fn().mockResolvedValue(false),
         create: jest.fn().mockImplementation((permission) => ({
