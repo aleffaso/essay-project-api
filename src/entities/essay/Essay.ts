@@ -10,8 +10,7 @@ import {
 import { v4 as uuid } from "uuid";
 import { User } from "../user/User";
 import { EssayUpdate } from "./EssayUpdate";
-import { EssayTag } from "./EssayTag";
-import { SpecificationType, StatusType } from "./Enum";
+import { SpecificationType, TagType, StatusType } from "./Enum";
 
 @Entity("essays")
 export class Essay {
@@ -25,6 +24,14 @@ export class Essay {
     default: SpecificationType.OTHER,
   })
   specification: SpecificationType;
+
+  @Column({
+    type: "enum",
+    enum: TagType,
+    nullable: false,
+    default: TagType.EDUCATION,
+  })
+  tag: TagType;
 
   @Column({ nullable: false, type: "varchar" })
   title: string;
@@ -52,11 +59,10 @@ export class Essay {
   @ManyToOne(() => User, (user) => user.essays, { nullable: false }) // Each Essay belongs to one User
   author: User;
 
-  @OneToMany(() => EssayUpdate, (essayUpdate) => essayUpdate.essay) // Each Essay has many essay updates
+  @OneToMany(() => EssayUpdate, (essayUpdate) => essayUpdate.essay, {
+    cascade: true,
+  }) // Each Essay has many essay updates
   updates: EssayUpdate[];
-
-  @OneToMany(() => EssayTag, (essayTag) => essayTag.essay) // Each Essay can have many tags
-  tags: EssayTag[];
 
   constructor(
     specification: SpecificationType,
@@ -64,8 +70,7 @@ export class Essay {
     text: string,
     uploadedLink: string,
     author: User,
-    updates: EssayUpdate[],
-    tags: EssayTag[]
+    updates: EssayUpdate[]
   ) {
     this.specification = specification;
     this.title = title;
@@ -73,7 +78,6 @@ export class Essay {
     this.uploadedLink = uploadedLink;
     this.author = author;
     this.updates = updates;
-    this.tags = tags;
     if (!this.id) {
       this.id = uuid();
     }

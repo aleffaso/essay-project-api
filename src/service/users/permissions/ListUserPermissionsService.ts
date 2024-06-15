@@ -1,8 +1,8 @@
-import { AppDataSource } from "../../data-source";
+import { AppDataSource } from "../../../data-source";
 
-import { UserPermission as UserPermissionTable } from "../../entities/user/UserPermission";
-import { DoesNotExistError, ForbiddenError } from "../../errors";
-import { getPermissions } from "../PermissionsUserService";
+import { UserPermission as UserPermissionTable } from "../../../entities/user/UserPermission";
+import { DoesNotExistError, ForbiddenError } from "../../../errors";
+import { getPermissions } from "../../PermissionsUserService";
 
 export class ListUserPermissionsService {
   async execute(authorization: any, page: number, limit: number) {

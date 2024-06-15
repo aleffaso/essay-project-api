@@ -3,10 +3,10 @@ import jwt from "jsonwebtoken";
 import * as userAuthMiddleware from "../../../middleware/userAuthMiddleware";
 import * as PermissionsUserService from "../../../service/PermissionsUserService";
 import UserPermissionController from "../../user/UserPermissionController";
-import { UserPermissionType } from "../../../service/user-permissions/_types";
-import { CreateUserPermissionService } from "../../../service/user-permissions/CreateUserPermissionService";
 import { AlreadyExistsError, ForbiddenError } from "../../../errors";
-import { ListUserPermissionsService } from "../../../service/user-permissions/ListUserPermissionsService";
+import { UserPermissionType } from "../../../service/users/permissions/_types";
+import { CreateUserPermissionService } from "../../../service/users/permissions/CreateUserPermissionService";
+import { ListUserPermissionsService } from "../../../service/users/permissions/ListUserPermissionsService";
 
 jest.mock("../../../service/users/AuthenticateUserService.ts");
 

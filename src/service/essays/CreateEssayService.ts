@@ -3,13 +3,15 @@ import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import { AppDataSource } from "../../data-source";
 import { User as UserTable } from "../../entities/user/User";
 import { Essay as EssayTable } from "../../entities/essay/Essay";
+import { EssayUpdate as EssayUpdateTable } from "../../entities/essay/EssayUpdate";
+
 import {
   DoesNotExistError,
   ForbiddenError,
   InvalidDataError,
 } from "../../errors";
 import { getPermissions } from "../PermissionsUserService";
-import { EssayCreateType, EssayResponseType } from "./_types";
+import { EssayType, EssayCreateType } from "./_types";
 import { EssayCreatedObserver } from "./observers/EmailNotifier";
 import { KEYS } from "../../constants";
 import { SpecificationType, StatusType } from "../../entities/essay/Enum";
@@ -54,7 +56,6 @@ export class CreateEssayService {
       }
 
       const essayRepo = AppDataSource.getRepository(EssayTable);
-
       const essay = essayRepo.create({
         specification,
         title,
@@ -62,36 +63,56 @@ export class CreateEssayService {
         uploadedLink,
         status: StatusType.PENDING,
         author: user,
-        updates: [],
-        tags: [],
       });
 
       await essayRepo.save(essay);
 
+      const essayUpdatesRepo = AppDataSource.getRepository(EssayUpdateTable);
+      const updates = essayUpdatesRepo.create({
+        grade: undefined,
+        annotations: StatusType.PENDING,
+        corrections: StatusType.PENDING,
+        comments: StatusType.PENDING,
+        user: user,
+        essay: essay,
+      });
+
+      await essayUpdatesRepo.save(updates);
+
       this.observer.notify(essay);
 
-      const essayResponse: EssayResponseType = {
-        id: essay.id,
-        specification: essay.specification,
-        title: essay.title,
-        text: essay.text,
-        uploadedLink: essay.uploadedLink,
-        status: essay.status,
+      const savedEssay = await essayRepo.findOne({
+        where: { id: essay.id },
+        relations: ["author", "updates"],
+      });
+
+      if (!savedEssay) {
+        throw new DoesNotExistError("Essay could not be found after creating");
+      }
+
+      const essayResponse: EssayType = {
+        id: savedEssay.id,
+        tag: savedEssay.tag,
+        specification: savedEssay.specification,
+        title: savedEssay.title,
+        text: savedEssay.text,
+        uploadedLink: savedEssay.uploadedLink,
+        status: savedEssay.status,
         author: {
-          id: essay.author.id,
-          firstName: essay.author.firstName,
-          lastName: essay.author.lastName,
-          email: essay.author.email,
-          isActive: essay.author.isActive,
-          permissions: essay.author.permissions,
-          essays: essay.author.essays,
+          id: savedEssay.author.id,
+          firstName: savedEssay.author.firstName,
+          lastName: savedEssay.author.lastName,
+          email: savedEssay.author.email,
+          isActive: savedEssay.author.isActive,
+          permissions: savedEssay.author.permissions,
+          essays: savedEssay.author.essays,
         },
-        updates: essay.updates,
-        tags: essay.tags,
+        updates: savedEssay.updates,
       };
 
       return { essay: essayResponse };
     } catch (error) {
+      console.log(error);
       if (error instanceof JsonWebTokenError) {
         throw new DoesNotExistError("Invalid token");
       }

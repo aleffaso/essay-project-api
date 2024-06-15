@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { CreateUserPermissionService } from "../../service/user-permissions/CreateUserPermissionService";
-import { ListUserPermissionsService } from "../../service/user-permissions/ListUserPermissionsService";
+import { CreateUserPermissionService } from "../../service/users/permissions/CreateUserPermissionService";
+import { ListUserPermissionsService } from "../../service/users/permissions/ListUserPermissionsService";
 import {
   AlreadyExistsError,
   DoesNotExistError,

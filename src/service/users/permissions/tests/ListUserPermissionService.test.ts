@@ -1,5 +1,5 @@
-import { DoesNotExistError, ForbiddenError } from "../../../errors";
-import * as PermissionsUserService from "../../PermissionsUserService";
+import { DoesNotExistError, ForbiddenError } from "../../../../errors";
+import * as PermissionsUserService from "../../../PermissionsUserService";
 import { ListUserPermissionsService } from "../ListUserPermissionsService";
 import { UserPermissionType } from "../_types";
 
@@ -39,7 +39,10 @@ describe("GET on /permissions using PermissionService", () => {
       .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
     jest
-      .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
+      .spyOn(
+        require("../../../../data-source.ts").AppDataSource,
+        "getRepository"
+      )
       .mockReturnValue({
         find: jest.fn().mockResolvedValue(false),
       });
@@ -57,7 +60,10 @@ describe("GET on /permissions using PermissionService", () => {
       .mockResolvedValueOnce({ hasPermissions: true, permissions: [] });
 
     jest
-      .spyOn(require("../../../data-source.ts").AppDataSource, "getRepository")
+      .spyOn(
+        require("../../../../data-source.ts").AppDataSource,
+        "getRepository"
+      )
       .mockReturnValue({
         find: jest.fn().mockResolvedValue(permissions),
       });

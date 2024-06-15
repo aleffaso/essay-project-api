@@ -1,12 +1,12 @@
 import { Essay } from "../../../entities/essay/Essay";
-import { EssayUpdate } from "../../../entities/essay/EssayUpdate";
+import { User } from "../../../entities/user/User";
 
 export interface EssayCreatedObserver {
   notify(essay: Essay): void;
 }
 
 export interface EssayUpdatedObserver {
-  notify(essay: Essay, essayUpdate: EssayUpdate): void;
+  notify(essay: Essay, user: User): void;
 }
 
 export class EmailEssayCreationNotifier implements EssayCreatedObserver {
@@ -19,10 +19,10 @@ export class EmailEssayCreationNotifier implements EssayCreatedObserver {
 }
 
 export class EmailEssayUpdateNotifier implements EssayUpdatedObserver {
-  notify(essay: Essay, essayUpdate: EssayUpdate): void {
+  notify(essay: Essay, user: User): void {
     //TODO: implement email notification -> Send to user who has sent the essay
     console.log(
-      `Hi ${essay.author}, your essay ${essay.title} was updated by: ${essayUpdate.user.firstName} - status: ${essay.status} `
+      `Hi ${essay.author.firstName}, your essay "${essay.title}" was updated by: ${user.firstName} - status: ${essay.status} `
     );
   }
 }

@@ -1,4 +1,3 @@
-import { AppDataSource } from "../../data-source";
 import { ServiceUnavailableError } from "../../errors";
 import { HealthCheckService } from "../HealthCheckService";
 

@@ -140,6 +140,50 @@ export const CreateEssayServicePermissions = (userPermissions: string[]) => {
   );
 };
 
+export const UpdateEssayServicePermissions = (userPermissions: string[]) => {
+  return (
+    userPermissions.includes(PERMISSION_LEVELS.ADMIN) ||
+    userPermissions.includes(PERMISSION_LEVELS.USER) ||
+    userPermissions.includes(PERMISSION_LEVELS.CUSTOMER) ||
+    userPermissions.includes(PERMISSION_LEVELS.FINANCIAL) ||
+    userPermissions.includes(PERMISSION_LEVELS.SUPPORT) ||
+    userPermissions.includes(PERMISSION_LEVELS.DEVELOPER)
+  );
+};
+
+export const ListEssaysServicePermissions = (userPermissions: string[]) => {
+  return (
+    userPermissions.includes(PERMISSION_LEVELS.ADMIN) ||
+    userPermissions.includes(PERMISSION_LEVELS.USER) ||
+    userPermissions.includes(PERMISSION_LEVELS.CUSTOMER) ||
+    userPermissions.includes(PERMISSION_LEVELS.FINANCIAL) ||
+    userPermissions.includes(PERMISSION_LEVELS.SUPPORT) ||
+    userPermissions.includes(PERMISSION_LEVELS.DEVELOPER)
+  );
+};
+
+export const DeleteEssayServicePermissions = (userPermissions: string[]) => {
+  return (
+    userPermissions.includes(PERMISSION_LEVELS.ADMIN) ||
+    userPermissions.includes(PERMISSION_LEVELS.USER) ||
+    userPermissions.includes(PERMISSION_LEVELS.CUSTOMER) ||
+    userPermissions.includes(PERMISSION_LEVELS.FINANCIAL) ||
+    userPermissions.includes(PERMISSION_LEVELS.SUPPORT) ||
+    userPermissions.includes(PERMISSION_LEVELS.DEVELOPER)
+  );
+};
+
+export const GetEssayServicePermissions = (userPermissions: string[]) => {
+  return (
+    userPermissions.includes(PERMISSION_LEVELS.ADMIN) ||
+    userPermissions.includes(PERMISSION_LEVELS.USER) ||
+    userPermissions.includes(PERMISSION_LEVELS.CUSTOMER) ||
+    userPermissions.includes(PERMISSION_LEVELS.FINANCIAL) ||
+    userPermissions.includes(PERMISSION_LEVELS.SUPPORT) ||
+    userPermissions.includes(PERMISSION_LEVELS.DEVELOPER)
+  );
+};
+
 type ServicePermissionMap = {
   [key: string]: (userPermissions: string[]) => boolean;
 };
@@ -155,4 +199,8 @@ const servicePermissionsMap: ServicePermissionMap = {
   ListUserPermissionsService: ListUserPermissionsService,
 
   CreateEssayService: CreateEssayServicePermissions,
+  UpdateEssayService: UpdateEssayServicePermissions,
+  ListEssaysService: ListEssaysServicePermissions,
+  DeleteEssayService: DeleteEssayServicePermissions,
+  GetEssayService: GetEssayServicePermissions,
 };
