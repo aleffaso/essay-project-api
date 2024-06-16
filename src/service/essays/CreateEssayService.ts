@@ -107,12 +107,12 @@ export class CreateEssayService {
           permissions: savedEssay.author.permissions,
           essays: savedEssay.author.essays,
         },
+        updatesCount: savedEssay.updates.length,
         updates: savedEssay.updates,
       };
 
       return { essay: essayResponse };
     } catch (error) {
-      console.log(error);
       if (error instanceof JsonWebTokenError) {
         throw new DoesNotExistError("Invalid token");
       }

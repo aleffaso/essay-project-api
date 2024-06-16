@@ -12,7 +12,7 @@ export class CustomError extends Error {
 
 export class DoesNotExistError extends CustomError {
   constructor(message: string) {
-    super("DoesNotExistError", message, 401);
+    super("DoesNotExistError", message, 404);
   }
 }
 

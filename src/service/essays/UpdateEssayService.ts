@@ -119,6 +119,7 @@ export class UpdateEssayService {
           permissions: essay.author.permissions,
           essays: essay.author.essays,
         },
+        updatesCount: newUpdates.length,
         updates: newUpdates?.map((update) => ({
           id: update.id,
           grade: update.grade,
@@ -132,7 +133,6 @@ export class UpdateEssayService {
 
       return { essay: essayResponse };
     } catch (error) {
-      console.log(error);
       if (error instanceof JsonWebTokenError) {
         throw new DoesNotExistError("Invalid token");
       }

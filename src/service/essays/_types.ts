@@ -24,6 +24,7 @@ export type EssayType = {
   uploadedLink: string;
   status: StatusType;
   author: UserType;
+  updatesCount: number;
   updates: EssayUpdate[];
 };
 

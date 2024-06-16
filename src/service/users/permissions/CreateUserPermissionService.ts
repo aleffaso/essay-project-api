@@ -39,6 +39,7 @@ export class CreateUserPermissionService {
 
       return { permission: userPermissionResponse };
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
