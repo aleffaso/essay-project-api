@@ -43,12 +43,12 @@ export class GetEssayService {
           permissions: essay.author.permissions,
           essays: essay.author.essays,
         },
+        updatesCount: essay.updates.length,
         updates: essay.updates,
       };
 
       return { essay: essayResponse };
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }

@@ -119,7 +119,7 @@ export const UpdateUserServicePermissions = (userPermissions: string[]) => {
 
 //Permission service
 
-export const CreateUserPermissionsService = (userPermissions: string[]) => {
+export const CreateUserPermissionService = (userPermissions: string[]) => {
   return userPermissions.includes(PERMISSION_LEVELS.ADMIN);
 };
 
@@ -195,7 +195,7 @@ const servicePermissionsMap: ServicePermissionMap = {
   UpdateUserService: UpdateUserServicePermissions,
   DeleteUserService: DeleteUserServicePermissions,
 
-  CreateUserPermissionsService: CreateUserPermissionsService,
+  CreateUserPermissionService: CreateUserPermissionService,
   ListUserPermissionsService: ListUserPermissionsService,
 
   CreateEssayService: CreateEssayServicePermissions,

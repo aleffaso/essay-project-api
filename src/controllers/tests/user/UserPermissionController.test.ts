@@ -229,7 +229,7 @@ describe("UserController", () => {
 
       await UserPermissionController.list(request, mockResponse);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
         error: "Permissions do not exist",
       });

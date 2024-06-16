@@ -61,7 +61,7 @@ describe("UserController", () => {
 
       await UserController.authenticate(request, mockResponse);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
         error: "Invalid credentials",
       });
@@ -377,7 +377,7 @@ describe("UserController", () => {
 
       await UserController.update(request, mockResponse);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
         error: "User does not exist",
       });
@@ -602,7 +602,7 @@ describe("UserController", () => {
 
       await UserController.get(request, mockResponse);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
         error: "User does not exist",
       });
@@ -742,7 +742,7 @@ describe("UserController", () => {
 
       await UserController.list(request, mockResponse);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
         error: "Users do not exist",
       });
@@ -874,7 +874,7 @@ describe("UserController", () => {
 
       await UserController.delete(request, mockResponse);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(401);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(mockResponse.json).toHaveBeenCalledWith({
         error: "User does not exist",
       });

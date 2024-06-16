@@ -45,10 +45,13 @@ export class ListEssaysService {
           permissions: essay.author.permissions,
           essays: essay.author.essays,
         },
+        updatesCount: essay.updates.length,
         updates: essay.updates,
       }));
 
       return { count: essayResponse.length, essays: essayResponse };
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 }
